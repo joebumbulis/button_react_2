@@ -2,4 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:14
+      - image: cimg/node:15.6.0
+    steps:
+      - checkout
+      - run: node --version
