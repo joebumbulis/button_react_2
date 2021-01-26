@@ -1,0 +1,16 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: cimg/node:15.6.0
+    steps:
+      - checkout
+      - run: 
+          name: Node Version
+          command: node --version
+      - run: 
+          name: NPM Install
+          command: npm install 
+      - run: 
+          name: Run Tests
+          command: npm test
