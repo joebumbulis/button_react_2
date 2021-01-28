@@ -4,7 +4,7 @@ import { useState } from 'react';
 function App() {
   const [displayText, setDisplayText] = useState(false);
 
-  const textToDisplay = <div className="display-text">Right Meow!💥😸</div>;
+  const textToDisplay = <div className="display-text">Right Now!💥😸</div>;
 
   return (
     <div className="App">
