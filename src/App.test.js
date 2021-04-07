@@ -12,5 +12,5 @@ test('calls onClick on button click', () => {
   expect(/Right Meow/).not.toBeInTheDocument;
   const button = screen.getByText(/CLICK ME 💣/i);
   fireEvent.click(button);
-  expect(screen.getByText(/Right Meow/i)).toBeInTheDocument;
+  expect(screen.getByText(/Right Moow/i)).toBeInTheDocument;
 })
