@@ -14,11 +14,11 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "prepare": "husky install",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint client server"
   },
   "eslintConfig": {
     "extends": [
@@ -26,11 +26,9 @@
       "react-app/jest"
     ]
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
+  "pre-commit": [
+    "lint"
+  ],
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
       "prettier --write"
@@ -47,8 +45,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "husky": "^6.0.0"
   }
 }
