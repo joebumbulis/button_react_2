@@ -1,3 +1,4 @@
+import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import App from './App';
 
@@ -13,4 +14,4 @@ test('calls onClick on button click', () => {
   const button = screen.getByText(/CLICK ME 💣/i);
   fireEvent.click(button);
   expect(screen.getByText(/Right Meow/i)).toBeInTheDocument;
-})
+});
