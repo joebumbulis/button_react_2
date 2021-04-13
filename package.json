@@ -28,7 +28,7 @@
     ]
   },
   "eslintIgnore": [
-    "src/**.*.test.js"
+    "src/**/*.test.js"
   ],
   "browserslist": {
     "production": [
