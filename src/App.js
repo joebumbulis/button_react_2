@@ -1,5 +1,6 @@
 import './App.css';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import Button from './button';
 
 function App() {
   const [displayText, setDisplayText] = useState(false);
@@ -14,14 +15,6 @@ function App() {
       </header>
     </div>
   );
-}
-
-const Button = ({ onClick }) => {
-  return (
-    <button id="easy-button" className='button' onClick={onClick}>
-      CLICK ME 💣
-    </button>
-  )
 }
 
 export default App;
