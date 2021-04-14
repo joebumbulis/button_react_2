@@ -40,7 +40,7 @@ jobs:
           name: Run Tests
           command: npm test
   lint: 
-     docker:
+    docker:
       - image: cimg/node:15.6.0
     steps:
       - checkout 
