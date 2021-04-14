@@ -10,10 +10,15 @@ workflows:
             - build
       - test:
           requires:
+            - build
+      - hold:
+          type: approval
+          requires:
             - lint
+            - test
       - deploy:
           requires: 
-            - test
+            - hold
           filters:
             branches:
               only: main
