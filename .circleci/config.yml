@@ -2,9 +2,16 @@ version: 2.1
 
 workflows:
   version: 2
-  build:
+  build-test-deploy:
     jobs:
       - build
+      - deploy:
+          requires: 
+            - build
+          filters:
+            branches:
+              only: main
+
 
 jobs:
   build:
@@ -32,6 +39,11 @@ jobs:
       - run: 
           name: Run Tests
           command: npm test
+  deploy:
+    docker:
+      - image: cimg/node:15.6.0
+    steps:
+      - checkout 
       - run: 
           name: Deploy Main To Heroku
           command: git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git main
