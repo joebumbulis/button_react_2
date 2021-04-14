@@ -18,7 +18,6 @@ workflows:
             branches:
               only: main
 
-
 jobs:
   build:
     docker:
@@ -80,7 +79,7 @@ jobs:
           paths:
             - ./node_modules
           key: dependency-cache-{{ .Branch }}-{{ checksum "package-lock.json" }}
-     - run: 
+      - run: 
           name: Run Tests
           command: npm test   
   deploy:
