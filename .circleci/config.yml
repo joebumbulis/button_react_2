@@ -8,9 +8,12 @@ workflows:
       - lint:
           requires:
             - build
+      - test:
+          requires:
+            - lint
       - deploy:
           requires: 
-            - lint
+            - test
           filters:
             branches:
               only: main
@@ -36,9 +39,6 @@ jobs:
           paths:
             - ./node_modules
           key: dependency-cache-{{ .Branch }}-{{ checksum "package-lock.json" }}
-      - run: 
-          name: Run Tests
-          command: npm test
   lint: 
     docker:
       - image: cimg/node:15.6.0
@@ -61,6 +61,28 @@ jobs:
       - run:
           name: Run Linting
           command: npm run lint
+  test: 
+    docker:
+      - image: cimg/node:15.6.0
+    steps:
+      - checkout 
+      - run: 
+          name: Node Version
+          command: node --version
+      - restore_cache:
+          keys: 
+            - dependency-cache-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - dependency-cache-{{ .Branch }}
+      - run: 
+          name: NPM Install
+          command: npm install 
+      - save_cache:
+          paths:
+            - ./node_modules
+          key: dependency-cache-{{ .Branch }}-{{ checksum "package-lock.json" }}
+     - run: 
+          name: Run Tests
+          command: npm test   
   deploy:
     docker:
       - image: cimg/node:15.6.0
