@@ -34,15 +34,15 @@ jobs:
           command: node --version
       - restore_cache:
           keys: 
-            - dependency-cache-{{ .Branch }}-{{ checksum "package-lock.json" }}
-            - dependency-cache-{{ .Branch }}
+            - dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - dependency-cache-v1-{{ .Branch }}
       - run: 
           name: NPM Install
           command: npm install 
       - save_cache:
           paths:
             - ./node_modules
-          key: dependency-cache-{{ .Branch }}-{{ checksum "package-lock.json" }}
+          key: dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
   lint: 
     docker:
       - image: cimg/node:15.6.0
@@ -53,15 +53,15 @@ jobs:
           command: node --version
       - restore_cache:
           keys: 
-            - dependency-cache-{{ .Branch }}-{{ checksum "package-lock.json" }}
-            - dependency-cache-{{ .Branch }}
+            - dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - dependency-cache-v1-{{ .Branch }}
       - run: 
           name: NPM Install
           command: npm install 
       - save_cache:
           paths:
             - ./node_modules
-          key: dependency-cache-{{ .Branch }}-{{ checksum "package-lock.json" }}
+          key: dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
       - run:
           name: Run Linting
           command: npm run lint
@@ -75,15 +75,15 @@ jobs:
           command: node --version
       - restore_cache:
           keys: 
-            - dependency-cache-{{ .Branch }}-{{ checksum "package-lock.json" }}
-            - dependency-cache-{{ .Branch }}
+            - dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - dependency-cache-v1-{{ .Branch }}
       - run: 
           name: NPM Install
           command: npm install 
       - save_cache:
           paths:
             - ./node_modules
-          key: dependency-cache-{{ .Branch }}-{{ checksum "package-lock.json" }}
+          key: dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
       - run: 
           name: Run Tests
           command: npm test   
