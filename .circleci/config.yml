@@ -1,28 +1,5 @@
 version: 2.1
 
-workflows:
-  version: 2
-  build-test-deploy:
-    jobs:
-      - build
-      - lint:
-          requires:
-            - build
-      - test:
-          requires:
-            - build
-      - hold:
-          type: approval
-          requires:
-            - lint
-            - test
-      - deploy:
-          requires: 
-            - hold
-          filters:
-            branches:
-              only: main
-
 jobs:
   build:
     docker:
@@ -95,3 +72,26 @@ jobs:
       - run: 
           name: Deploy Main To Heroku
           command: git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git main
+
+workflows:
+  version: 2
+  build-test-deploy:
+    jobs:
+      - build
+      - lint:
+          requires:
+            - build
+      - test:
+          requires:
+            - build
+      - hold:
+          type: approval
+          requires:
+            - lint
+            - test
+      - deploy:
+          requires: 
+            - hold
+          filters:
+            branches:
+              only: main
