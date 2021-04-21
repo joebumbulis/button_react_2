@@ -10,6 +10,7 @@
     "extends": [
         "eslint:recommended",
         "plugin:react/recommended",
+        "react-app",
         "airbnb",
         "plugin:jest/recommended"
     ],
@@ -22,7 +23,8 @@
         "sourceType": "module"
     },
     "plugins": [
-        "react"
+        "react",
+        "jsx-a11y"
     ],
     "rules": {
         "comma-dangle": [
