@@ -41,7 +41,7 @@ jobs:
             - dependency-cache-v1-{{ .Branch }}
       - run: 
           name: NPM Install
-          command: npm install 
+          command: npm install --legacy-peer-deps  
       - save_cache:
           paths:
             - ./node_modules
@@ -59,7 +59,7 @@ jobs:
             - dependency-cache-v1-{{ .Branch }}
       - run: 
           name: NPM Install
-          command: npm install 
+          command: npm install --legacy-peer-deps  
       - save_cache:
           paths:
             - ./node_modules
@@ -80,7 +80,7 @@ jobs:
             - dependency-cache-v1-{{ .Branch }}
       - run: 
           name: NPM Install
-          command: npm install 
+          command: npm install --legacy-peer-deps  
       - save_cache:
           paths:
             - ./node_modules
