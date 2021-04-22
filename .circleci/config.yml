@@ -37,7 +37,7 @@ jobs:
           command: node --version
       - restore_cache:
           keys: 
-            - dependency-cache-v1-{{ .Branch }}-{{ checksum "`" }}
+            - dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
             - dependency-cache-v1-{{ .Branch }}
       - run: 
           name: NPM Install
@@ -45,7 +45,7 @@ jobs:
       - save_cache:
           paths:
             - ./node_modules
-          key: dependency-cache-v1-{{ .Branch }}-{{ checksum "`" }}
+          key: dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
   lint: 
     executor: my-executor
     steps:
@@ -55,7 +55,7 @@ jobs:
           command: node --version
       - restore_cache:
           keys: 
-            - dependency-cache-v1-{{ .Branch }}-{{ checksum "`" }}
+            - dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
             - dependency-cache-v1-{{ .Branch }}
       - run: 
           name: NPM Install
@@ -63,7 +63,7 @@ jobs:
       - save_cache:
           paths:
             - ./node_modules
-          key: dependency-cache-v1-{{ .Branch }}-{{ checksum "`" }}
+          key: dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
       - run:
           name: Run Linting
           command: npm run lint
@@ -76,7 +76,7 @@ jobs:
           command: node --version
       - restore_cache:
           keys: 
-            - dependency-cache-v1-{{ .Branch }}-{{ checksum "`" }}
+            - dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
             - dependency-cache-v1-{{ .Branch }}
       - run: 
           name: NPM Install
@@ -84,7 +84,7 @@ jobs:
       - save_cache:
           paths:
             - ./node_modules
-          key: dependency-cache-v1-{{ .Branch }}-{{ checksum "`" }}
+          key: dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
       - run: 
           name: Run Tests
           command: npm test   
