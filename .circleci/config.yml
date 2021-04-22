@@ -1,4 +1,8 @@
 version: 2.1
+executors:
+  my-executor:
+     docker:
+      - image: cimg/node:15.6.0
 
 workflows:
   version: 2
@@ -25,8 +29,7 @@ workflows:
 
 jobs:
   build:
-    docker:
-      - image: cimg/node:15.6.0
+    executor: my-executor
     steps:
       - checkout
       - run: 
@@ -44,8 +47,7 @@ jobs:
             - ./node_modules
           key: dependency-cache-v1-{{ .Branch }}-{{ checksum "`" }}
   lint: 
-    docker:
-      - image: cimg/node:15.6.0
+    executor: my-executor
     steps:
       - checkout 
       - run: 
@@ -66,8 +68,7 @@ jobs:
           name: Run Linting
           command: npm run lint
   test: 
-    docker:
-      - image: cimg/node:15.6.0
+    executor: my-executor
     steps:
       - checkout 
       - run: 
@@ -88,8 +89,7 @@ jobs:
           name: Run Tests
           command: npm test   
   deploy:
-    docker:
-      - image: cimg/node:15.6.0
+    executor: my-executor
     steps:
       - checkout 
       - run: 
