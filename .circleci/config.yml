@@ -13,12 +13,18 @@ workflows:
   build-test-deploy:
     jobs:
       - build
+        - printstep:
+            printname: Build
       - lint:
           requires:
             - build
+          - printstep:
+              printname: lint
       - test:
           requires:
             - build
+          - printstep:
+              printname: test
       - hold:
           type: approval
           requires:
@@ -52,6 +58,15 @@ commands:
           key: dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}  
 
 jobs:
+  printstep:
+    description: A minimial job to echo the name of the step in order to demonstrate what a parameterized job looksl ike
+    parameters:
+      printname:
+        description: "What job is this?"
+        default: "Build"
+        type: string
+      steps:
+        - run: echo "This is the step: << parameters.stepname >>"
   build:
     executor: my-executor
     steps:
