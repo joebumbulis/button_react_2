@@ -13,18 +13,12 @@ workflows:
   build-test-deploy:
     jobs:
       - build
-        - printstep:
-            printname: Build
       - lint:
           requires:
             - build
-          - printstep:
-              printname: lint
       - test:
           requires:
             - build
-          - printstep:
-              printname: test
       - hold:
           type: approval
           requires:
