@@ -31,9 +31,9 @@ workflows:
             branches:
               only: main
 
-jobs:
-  build:
-    executor: my-executor
+commands:
+  installNode:
+    description: "Install and cache node"
     steps:
       - checkout
       - run: 
@@ -50,45 +50,24 @@ jobs:
           paths:
             - ./node_modules
           key: dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+      
+
+jobs:
+  build:
+    executor: my-executor
+    steps:
+      - installNode
   lint: 
     executor: my-executor
     steps:
-      - checkout 
-      - run: 
-          name: Node Version
-          command: node --version
-      - restore_cache:
-          keys: 
-            - dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
-            - dependency-cache-v1-{{ .Branch }}
-      - run: 
-          name: NPM Install
-          command: npm install --legacy-peer-deps  
-      - save_cache:
-          paths:
-            - ./node_modules
-          key: dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+      - installNode
       - run:
           name: Run Linting
           command: npm run lint
   test: 
     executor: my-executor
     steps:
-      - checkout 
-      - run: 
-          name: Node Version
-          command: node --version
-      - restore_cache:
-          keys: 
-            - dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
-            - dependency-cache-v1-{{ .Branch }}
-      - run: 
-          name: NPM Install
-          command: npm install --legacy-peer-deps  
-      - save_cache:
-          paths:
-            - ./node_modules
-          key: dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+      - installNode 
       - run: 
           name: Run Tests
           command: npm test   
