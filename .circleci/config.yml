@@ -64,6 +64,7 @@ jobs:
   build:
     executor: my-executor
     steps:
+      - printstep
       - installnode
   lint: 
     executor: my-executor
