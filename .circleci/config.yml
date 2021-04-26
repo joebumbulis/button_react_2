@@ -13,9 +13,15 @@ workflows:
   build-test-deploy:
     jobs:
       - build
+          jobs:
+            - printstep:
+               printname: BUILD
       - lint:
           requires:
             - build
+          jobs:
+            - printstep:
+                printname: LINT
       - test:
           requires:
             - build
