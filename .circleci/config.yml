@@ -32,7 +32,7 @@ workflows:
               only: main
 
 commands:
-  installNode:
+  installnode:
     description: "Install and cache node"
     steps:
       - checkout
@@ -49,25 +49,24 @@ commands:
       - save_cache:
           paths:
             - ./node_modules
-          key: dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
-      
+          key: dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}  
 
 jobs:
   build:
     executor: my-executor
     steps:
-      - installNode
+      - installnode
   lint: 
     executor: my-executor
     steps:
-      - installNode
+      - installnode
       - run:
           name: Run Linting
           command: npm run lint
   test: 
     executor: my-executor
     steps:
-      - installNode 
+      - installnode 
       - run: 
           name: Run Tests
           command: npm test   
