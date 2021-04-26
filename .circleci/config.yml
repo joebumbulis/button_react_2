@@ -59,8 +59,8 @@ jobs:
         description: "What job is this?"
         default: "Build"
         type: string
-      steps:
-        - run: echo "This is the step: << parameters.stepname >>"
+    steps:
+      - run: echo "This is the step: << parameters.stepname >>"
   build:
     executor: my-executor
     steps:
