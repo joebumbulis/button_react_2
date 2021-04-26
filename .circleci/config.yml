@@ -60,7 +60,7 @@ jobs:
         default: "Build"
         type: string
     steps:
-      - run: echo "This is the step: << parameters.stepname >>"
+      - run: echo "This is the step << parameters.stepname >>"
   build:
     executor: my-executor
     steps:
