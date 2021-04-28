@@ -7,6 +7,7 @@ executors:
 
 orbs:
   heroku: circleci/heroku@1.2.6
+  codecov: codecov/codecov@1.1.5
 
 workflows:
   version: 2
@@ -19,6 +20,8 @@ workflows:
       - test:
           requires:
             - build
+      - codecov/upload:
+          file coverage/*.json
       - hold:
           type: approval
           requires:
