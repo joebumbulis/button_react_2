@@ -20,8 +20,6 @@ workflows:
       - test:
           requires:
             - build
-      - codecov/upload:
-          file: coverage/*.json
       - hold:
           type: approval
           requires:
@@ -33,6 +31,7 @@ workflows:
           filters:
             branches:
               only: main
+
 
 commands:
   installnode:
@@ -73,6 +72,8 @@ jobs:
       - run: 
           name: Run Tests
           command: npm test   
+      - codecov/upload:
+          file: coverage/*.json
 
   # REPLACED code with orb
   # deploy:
