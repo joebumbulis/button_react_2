@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React from 'react';
-import { fireEvent, getByTestId, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import App from './App';
 
 describe('general rendering', () => {
