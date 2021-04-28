@@ -21,7 +21,7 @@ workflows:
           requires:
             - build
       - codecov/upload:
-          file coverage/*.json
+          file: coverage/*.json
       - hold:
           type: approval
           requires:
