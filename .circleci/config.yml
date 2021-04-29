@@ -7,6 +7,7 @@ executors:
 
 orbs:
   heroku: circleci/heroku@1.2.6
+  codecov: codecov/codecov@1.1.5
 
 workflows:
   version: 2
@@ -30,6 +31,7 @@ workflows:
           filters:
             branches:
               only: main
+
 
 commands:
   installnode:
@@ -70,6 +72,9 @@ jobs:
       - run: 
           name: Run Tests
           command: npm test   
+      - codecov/upload:
+          file: coverage/*.xml
+          token: $CODECOV_TOKEN
 
   # REPLACED code with orb
   # deploy:
