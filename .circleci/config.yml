@@ -6,7 +6,7 @@ executors:
       - image: cimg/node:15.6.0
 
 orbs:
-  # heroku: circleci/heroku@1.2.6
+  heroku: circleci/heroku@1.2.6
   codecov: codecov/codecov@1.1.5
 
 workflows:
@@ -25,8 +25,7 @@ workflows:
           requires:
             - lint
             - test
-      # - heroku/deploy-via-git:
-      - deploy:
+      - heroku/deploy-via-git:
           requires: 
             - hold
           filters:
@@ -78,10 +77,10 @@ jobs:
           token: $CODECOV_TOKEN
 
   # REPLACED code with orb
-  deploy:
-    executor: my-executor
-    steps:
-      - checkout 
-      - run: 
-          name: Deploy Main To Heroku
-          command: git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git main
+  # deploy:
+  #   executor: my-executor
+  #   steps:
+  #     - checkout 
+  #     - run: 
+  #         name: Deploy Main To Heroku
+  #         command: git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git main
