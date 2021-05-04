@@ -68,7 +68,7 @@ jobs:
           name: Run Linting
           command: npm run lint
   test: 
-    parallelism: 4
+    parallelism: 2
     executor: my-executor
     steps:
       - installnode 
@@ -77,6 +77,13 @@ jobs:
           command: |
             TEST=$(circleci tests glob **/__tests__/*.js | circleci tests split --split-by=timings)
             npm test $TEST
+      - run:
+          command: cp clover.xml ~/junit/
+          when: always
+      - store_test_results:
+          path: ~/junit
+      - store_artifacts:
+          path: ~/junit
 
   # REPLACED code with orb
   # deploy:
