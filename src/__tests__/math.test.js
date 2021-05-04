@@ -1,6 +1,6 @@
 import {
   sum, sub, multiply, divide,
-} from './math';
+} from '../math';
 
 describe('tests addition problems', () => {
   test('adds 3 + 2 to equal 5', () => {
