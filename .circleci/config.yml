@@ -75,15 +75,9 @@ jobs:
       - run: 
           name: Run Tests
           command: |
-            TEST=$(circleci tests glob **/__tests__/*.js | circleci tests split --split-by=timings)
+            TEST=$(circleci tests glob **/__tests__/*.js | circleci tests split)
             npm test $TEST
-      - run:
-          command: cp clover.xml ~/junit/
-          when: always
-      - store_test_results:
-          path: ~/junit
-      - store_artifacts:
-          path: ~/junit
+  
 
   # REPLACED code with orb
   # deploy:
