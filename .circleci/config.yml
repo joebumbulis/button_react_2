@@ -68,12 +68,15 @@ jobs:
           name: Run Linting
           command: npm run lint
   test: 
+    parallelism: 2
     executor: my-executor
     steps:
       - installnode 
       - run: 
           name: Run Tests
-          command: npm test   
+          command: |
+            TEST=$(circleci tests glob **/__tests__/*.js | circleci tests split)
+            npm test $TEST
 
   # REPLACED code with orb
   # deploy:
