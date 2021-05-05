@@ -74,11 +74,14 @@ jobs:
     steps:
       - installnode 
       - run: npm run coverage
+      - run: mkdir ~/coverage
       - run: 
           name: Run Tests
           command: |
             TEST=$(circleci tests glob **/__tests__/*.js | circleci tests split --split-by=timings)
             npm test $TEST
+      - run: 
+          command: cp clover.xml ~/coverage
       - store_test_results:
           path: ~/coverage
   
