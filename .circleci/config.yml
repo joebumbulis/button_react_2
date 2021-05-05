@@ -73,11 +73,14 @@ jobs:
     executor: my-executor
     steps:
       - installnode 
+      - run: npm run coverage
       - run: 
           name: Run Tests
           command: |
-            TEST=$(circleci tests glob **/__tests__/*.js | circleci tests split)
+            TEST=$(circleci tests glob **/__tests__/*.js | circleci tests split --split-by=timings)
             npm test $TEST
+      - store_test_results:
+          path: ~/coverage
   
 
   # REPLACED code with orb
