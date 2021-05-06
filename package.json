@@ -19,9 +19,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:coverage": "react-scripts test --ci --coverage --reporters=default --reporters=jest-junit --addFileAttribute=true --watchAll=false",
     "eject": "react-scripts eject",
-    "lint": "eslint src/**/*.js", 
-    "coverage": "npm test -- --coverage --watchAll=false"
+    "lint": "eslint src/**/*.js"
   },
   "eslintConfig": {
     "extends": [
@@ -29,8 +29,15 @@
       "react-app/jest"
     ]
   },
-  "jest": {
-    "coverageReporters": ["text-summary"]
+  "jest-junit": {
+    "suiteName": "jest tests",
+    "outputDirectory": ".",
+    "addFileAttribute": "true",
+    "outputName": "test-results/junit.xml",
+    "classNameTemplate": "{classname}-{title}",
+    "titleTemplate": "{classname}-{title}",
+    "ancestorSeparator": " › ",
+    "usePathForSuiteName": "true"
   },
   "browserslist": {
     "production": [

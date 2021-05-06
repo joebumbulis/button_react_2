@@ -73,17 +73,18 @@ jobs:
     executor: my-executor
     steps:
       - installnode 
-      - run: npm run coverage
-      - run: mkdir ~/coverage
+      - run: mkdir ~/junit
       - run: 
           name: Run Tests
           command: |
             TEST=$(circleci tests glob **/__tests__/*.js | circleci tests split --split-by=timings)
-            npm test $TEST
+            npm run test:coverage $TEST
       - run: 
-          command: cp clover.xml ~/coverage
+          command: cp test-results/junit.xml ~/junit
       - store_test_results:
-          path: ~/coverage
+          path: ~/junit
+      - store_artifacts:
+          path: ~/junit
   
 
   # REPLACED code with orb
