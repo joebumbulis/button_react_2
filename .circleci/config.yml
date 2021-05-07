@@ -1,5 +1,5 @@
 version: 2.1
-
+#reusable executors: define build environment (container or vm) that can be used to run any job(s) in this config
 executors:
   my-executor:
      docker:
@@ -8,6 +8,7 @@ executors:
 orbs:
   heroku: circleci/heroku@1.2.6
 
+#orchestrate jobs: define dependencies, run order, and approval 
 workflows:
   version: 2
   build-test-deploy:
@@ -34,7 +35,7 @@ workflows:
             branches:
               only: main
 
-
+# reusable commands: can be called as steps in any job(s) in this config
 commands:
   installnode:
     description: "Install and cache node"
@@ -47,6 +48,7 @@ commands:
           keys: 
             - dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
             - dependency-cache-v1-{{ .Branch }}
+            - dependency-cache-v1-
       - run: 
           name: NPM Install
           command: npm install --legacy-peer-deps  
@@ -54,7 +56,7 @@ commands:
           paths:
             - ./node_modules
           key: dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}  
-
+# builing blocks of ci/cd
 jobs:
   build:
     executor: my-executor
@@ -68,12 +70,23 @@ jobs:
           name: Run Linting
           command: npm run lint
   test: 
+    parallelism: 2
     executor: my-executor
     steps:
       - installnode 
+      - run: mkdir ~/junit
       - run: 
           name: Run Tests
-          command: npm test   
+          command: |
+            TEST=$(circleci tests glob **/__tests__/*.js | circleci tests split --split-by=timings)
+            npm run test:coverage $TEST
+      - run: 
+          command: cp test-results/junit.xml ~/junit
+      - store_test_results:
+          path: ~/junit
+      - store_artifacts:
+          path: ~/junit
+  
 
   # REPLACED code with orb
   # deploy:

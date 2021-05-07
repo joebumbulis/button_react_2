@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="18" failures="0" time="4.336">
+  <testsuite name="src/__tests__/math.test.js" errors="0" failures="0" skipped="0" timestamp="2021-05-06T18:28:01" time="1.412" tests="16">
+    <testcase classname="tests addition problems-adds 3 + 2 to equal 5" name="tests addition problems-adds 3 + 2 to equal 5" time="0.003" file="src/__tests__/math.test.js">
+    </testcase>
+    <testcase classname="tests addition problems-adds 3 + 3 to equal 6" name="tests addition problems-adds 3 + 3 to equal 6" time="0.001" file="src/__tests__/math.test.js">
+    </testcase>
+    <testcase classname="tests addition problems-adds 10 + 2 to equal 12" name="tests addition problems-adds 10 + 2 to equal 12" time="0" file="src/__tests__/math.test.js">
+    </testcase>
+    <testcase classname="tests addition problems-adds 3 + 7 to equal 10" name="tests addition problems-adds 3 + 7 to equal 10" time="0.001" file="src/__tests__/math.test.js">
+    </testcase>
+    <testcase classname="tests subtraction-subtracts 3 - 2 to equal 1" name="tests subtraction-subtracts 3 - 2 to equal 1" time="0" file="src/__tests__/math.test.js">
+    </testcase>
+    <testcase classname="tests subtraction-subtracts 10 - 2 to equal 8" name="tests subtraction-subtracts 10 - 2 to equal 8" time="0.001" file="src/__tests__/math.test.js">
+    </testcase>
+    <testcase classname="tests subtraction-subtracts 3 - 5 to equal -2" name="tests subtraction-subtracts 3 - 5 to equal -2" time="0" file="src/__tests__/math.test.js">
+    </testcase>
+    <testcase classname="tests subtraction-subtracts 12 - 2 to equal 10" name="tests subtraction-subtracts 12 - 2 to equal 10" time="0" file="src/__tests__/math.test.js">
+    </testcase>
+    <testcase classname="tests multiplication problems-multiplies 3 * 2 to equal 6" name="tests multiplication problems-multiplies 3 * 2 to equal 6" time="0.001" file="src/__tests__/math.test.js">
+    </testcase>
+    <testcase classname="tests multiplication problems-multiplies 8 * 2 to equal 16" name="tests multiplication problems-multiplies 8 * 2 to equal 16" time="0" file="src/__tests__/math.test.js">
+    </testcase>
+    <testcase classname="tests multiplication problems-multiplies 3 * 3 to equal 9" name="tests multiplication problems-multiplies 3 * 3 to equal 9" time="0" file="src/__tests__/math.test.js">
+    </testcase>
+    <testcase classname="tests multiplication problems-multiplies 10 * 2 to equal 20" name="tests multiplication problems-multiplies 10 * 2 to equal 20" time="0.001" file="src/__tests__/math.test.js">
+    </testcase>
+    <testcase classname="tests division problems-divides 6 / 2 to equal 3" name="tests division problems-divides 6 / 2 to equal 3" time="0" file="src/__tests__/math.test.js">
+    </testcase>
+    <testcase classname="tests division problems-divides 36 / 6 to equal 6" name="tests division problems-divides 36 / 6 to equal 6" time="0" file="src/__tests__/math.test.js">
+    </testcase>
+    <testcase classname="tests division problems-divides 6 / 3 to equal 2" name="tests division problems-divides 6 / 3 to equal 2" time="0" file="src/__tests__/math.test.js">
+    </testcase>
+    <testcase classname="tests division problems-divides 6 / 6 to equal 1" name="tests division problems-divides 6 / 6 to equal 1" time="0" file="src/__tests__/math.test.js">
+    </testcase>
+  </testsuite>
+  <testsuite name="src/__tests__/App.test.js" errors="0" failures="0" skipped="0" timestamp="2021-05-06T18:28:01" time="1.671" tests="2">
+    <testcase classname="general rendering-renders click me button" name="general rendering-renders click me button" time="0.039" file="src/__tests__/App.test.js">
+    </testcase>
+    <testcase classname="general rendering-calls onClick on button click" name="general rendering-calls onClick on button click" time="0.014" file="src/__tests__/App.test.js">
+    </testcase>
+  </testsuite>
+</testsuites>

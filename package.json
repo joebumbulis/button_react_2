@@ -6,6 +6,7 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "jest-junit": "^10.0.0",
     "lint-staged": "^10.5.4",
     "prettier": "^2.2.1",
     "prop-types": "^15.7.2",
@@ -18,6 +19,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:coverage": "react-scripts test --ci --coverage --reporters=default --reporters=jest-junit --addFileAttribute=true --watchAll=false",
     "eject": "react-scripts eject",
     "lint": "eslint src/**/*.js"
   },
@@ -26,6 +28,16 @@
       "react-app",
       "react-app/jest"
     ]
+  },
+  "jest-junit": {
+    "suiteName": "jest tests",
+    "outputDirectory": ".",
+    "addFileAttribute": "true",
+    "outputName": "test-results/junit.xml",
+    "classNameTemplate": "{classname}-{title}",
+    "titleTemplate": "{classname}-{title}",
+    "ancestorSeparator": " › ",
+    "usePathForSuiteName": "true"
   },
   "browserslist": {
     "production": [
