@@ -4,6 +4,7 @@ executors:
   my-executor:
      docker:
       - image: cimg/node:15.6.0
+    # resource_class: large
 
 orbs:
   heroku: circleci/heroku@1.2.6
