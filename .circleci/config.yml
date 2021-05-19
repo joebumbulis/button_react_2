@@ -71,7 +71,7 @@ jobs:
           name: Run Linting
           command: npm run lint
   test: 
-    parallelism: 2
+    parallelism: 4
     executor: my-executor
     steps:
       - installnode 
