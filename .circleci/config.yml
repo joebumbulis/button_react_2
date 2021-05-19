@@ -11,7 +11,7 @@ orbs:
 
 #orchestrate jobs: define dependencies, run order, and approval 
 workflows:
-  version: 2
+  version: 4
   build-test-deploy:
     jobs:
       - build
