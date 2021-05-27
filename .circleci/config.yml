@@ -65,6 +65,7 @@ jobs:
       - installnode
   lint: 
     executor: my-executor
+    resource_class: small
     steps:
       - installnode
       - run:
