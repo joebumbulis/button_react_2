@@ -3,7 +3,7 @@ import { func } from 'prop-types';
 
 const Button = ({ onClick }) => (
   <button type="button" id="easy-button" className="button" onClick={onClick}>
-    CLICK 💣
+    CLICK ME 💣
   </button>
 );
 
@@ -16,4 +16,3 @@ Button.defaultProps = {
 };
 
 export default Button;
-`
