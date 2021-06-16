@@ -62,6 +62,9 @@ jobs:
   build:
     executor: my-executor
     steps:
+    # DLC does nothing here, its caching depends on commonality of the image layers.
+      - setup_remote_docker:
+          docker_layer_caching: true
       - installnode
   lint: 
     executor: my-executor
