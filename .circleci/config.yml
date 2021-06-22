@@ -111,15 +111,3 @@ workflows:
             .circleci/.* circle-ci true
           # Optional, defaults to main:
           base-revision: << pipeline.git.revision >>
-
-workflows:
-  setup-workflow:
-    jobs:
-      - path-filtering/filter:
-          mapping: |
-            src/.* test-src true
-            build/.* build-client true
-            .circleci/.* circle-ci true
-            \@changes/.* \@changes true
-          # Optional, defaults to main:
-          base-revision: << pipeline.git.revision >>
