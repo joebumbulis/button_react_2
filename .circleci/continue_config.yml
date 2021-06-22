@@ -96,7 +96,7 @@ workflows:
   back-end:
     when: << pipeline.parameters.back-end >> 
     jobs:
-      - build
+      - back-end
     
   test-src:
     when: << pipeline.parameters.test-src >>
