@@ -111,4 +111,4 @@ workflows:
             back-end/.* back-end true
             .circleci/.* circle-ci true
           # Optional, defaults to main:
-          base-revision: << pipeline.git.revision >>
+          base-revision: origin/main
