@@ -1,0 +1,124 @@
+version: 2.1
+
+orbs:
+  # Uses the Continuation API #
+  continuation: circleci/continuation@0.1.2
+  # Uses path filtering for mono support #
+  path-filtering: circleci/path-filtering@0.0.2
+
+  heroku: circleci/heroku@1.2.6
+
+executors:
+  my-executor:
+     docker:
+      - image: cimg/node:15.6.0
+
+parameters:
+  circle-ci:
+    type: boolean
+    default: false
+  test-src:
+    type: boolean
+    default: false
+  back-end:
+    type: boolean
+    default: false
+
+commands:
+  installnode:
+    description: "Install and cache node"
+    steps:
+      - checkout
+      - run: 
+          name: Node Version
+          command: node --version
+      - restore_cache:
+          keys: 
+            - dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - dependency-cache-v1-{{ .Branch }}
+            - dependency-cache-v1-
+      - run: 
+          name: NPM Install
+          command: npm install --legacy-peer-deps  
+      - save_cache:
+          paths:
+            - ./node_modules
+          key: dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}  
+
+jobs:
+  build:
+    executor: my-executor
+    steps:
+    # DLC does nothing here, its caching depends on commonality of the image layers.
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - installnode
+  lint: 
+    executor: my-executor
+    resource_class: small
+    steps:
+      - installnode
+      - run:
+          name: Run Linting
+          command: npm run lint
+  test: 
+    parallelism: 4
+    executor: my-executor
+    resource_class: large
+    steps:
+      - installnode 
+      - run: mkdir ~/junit
+      - run: 
+          name: Run Tests
+          command: |
+            TEST=$(circleci tests glob **/__tests__/*.js | circleci tests split --split-by=timings)
+            npm run test:coverage $TEST
+      - run: 
+          command: cp test-results/junit.xml ~/junit
+      - store_test_results:
+          path: ~/junit
+      - store_artifacts:
+          path: ~/junit
+
+  back-end:
+    machine: true
+    steps:
+      - checkout
+      - run: "echo 'Hello from module B!'"
+      - run: cat back-end/README.md
+
+workflows:
+  circle-ci:
+    when: << pipeline.parameters.circle-ci >> 
+    jobs:
+      - build
+
+  back-end:
+    when: << pipeline.parameters.back-end >> 
+    jobs:
+      - back-end
+    
+  test-src:
+    when: << pipeline.parameters.test-src >>
+    jobs:
+      - build
+      - lint:
+          requires:
+            - build
+      - test:
+          requires:
+            - build
+      - hold:
+          type: approval
+          requires:
+            - lint
+            - test
+          filters: 
+            branches:
+              only: main
+      - heroku/deploy-via-git:
+          requires: 
+            - hold
+          filters:
+            branches:
+              only: main
