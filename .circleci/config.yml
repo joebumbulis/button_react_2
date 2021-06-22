@@ -99,7 +99,8 @@ version: 2.1
 
 setup: true
 
-path-filtering: circleci/path-filtering@0.0.2
+orbs:
+  path-filtering: circleci/path-filtering@0.0.2
 
 workflows:
   setup-workflow:
