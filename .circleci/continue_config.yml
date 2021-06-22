@@ -9,7 +9,7 @@ orbs:
   heroku: circleci/heroku@1.2.6
   circleci-cli: circleci/circleci-cli@0.1.9
 
- executors:
+executors:
   my-executor:
      docker:
       - image: cimg/node:15.6.0
