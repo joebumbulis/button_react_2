@@ -94,8 +94,7 @@
 #           path: ~/junit
   
   ###########################################################################################################################
-  ## setup workflows
-
+  ## setup workflows ##
 version: 2.1 
 
 setup: true
@@ -108,8 +107,8 @@ workflows:
     jobs:
       - path-filtering/filter:
           mapping: |
-            src./* test-src true
-            back-end./* back-end true
+            src/.* test-src true
+            back-end/.* back-end true
             .circleci/.* circle-ci true
           # Optional, defaults to main:
           base-revision: << pipeline.git.revision >>
