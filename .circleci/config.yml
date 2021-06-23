@@ -1,114 +1,114 @@
-# version: 2.1
-# #reusable executors: define build environment (container or vm) that can be used to run any job(s) in this config
-# executors:
-#   my-executor:
-#      docker:
-#       - image: cimg/node:15.6.0
-#     # resource_class: large
+version: 2.1
+#reusable executors: define build environment (container or vm) that can be used to run any job(s) in this config
+executors:
+  my-executor:
+     docker:
+      - image: cimg/node:15.6.0
+    # resource_class: large
 
-# orbs:
-#   heroku: circleci/heroku@1.2.6
+orbs:
+  heroku: circleci/heroku@1.2.6
 
-# #orchestrate jobs: define dependencies, run order, and approval 
-# workflows:
-#   version: 4
-#   build-test-deploy:
-#     jobs:
-#       - build
-#       - lint:
-#           requires:
-#             - build
-#       - test:
-#           requires:
-#             - build
-#       - hold:
-#           type: approval
-#           requires:
-#             - lint
-#             - test
-#           filters: 
-#             branches:
-#               only: main
-#       - heroku/deploy-via-git:
-#           requires: 
-#             - hold
-#           filters:
-#             branches:
-#               only: main
+#orchestrate jobs: define dependencies, run order, and approval 
+workflows:
+  version: 4
+  build-test-deploy:
+    jobs:
+      - build
+      - lint:
+          requires:
+            - build
+      - test:
+          requires:
+            - build
+      - hold:
+          type: approval
+          requires:
+            - lint
+            - test
+          filters: 
+            branches:
+              only: main
+      - heroku/deploy-via-git:
+          requires: 
+            - hold
+          filters:
+            branches:
+              only: main
 
-# # reusable commands: can be called as steps in any job(s) in this config
-# commands:
-#   installnode:
-#     description: "Install and cache node"
-#     steps:
-#       - checkout
-#       - run: 
-#           name: Node Version
-#           command: node --version
-#       - restore_cache:
-#           keys: 
-#             - dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
-#             - dependency-cache-v1-{{ .Branch }}
-#             - dependency-cache-v1-
-#       - run: 
-#           name: NPM Install
-#           command: npm install --legacy-peer-deps  
-#       - save_cache:
-#           paths:
-#             - ./node_modules
-#           key: dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}  
-# # builing blocks of ci/cd
-# jobs:
-#   build:
-#     executor: my-executor
-#     steps:
-#     # DLC does nothing here, its caching depends on commonality of the image layers.
-#       - setup_remote_docker:
-#           docker_layer_caching: true
-#       - installnode
-#   lint: 
-#     executor: my-executor
-#     resource_class: small
-#     steps:
-#       - installnode
-#       - run:
-#           name: Run Linting
-#           command: npm run lint
-#   test: 
-#     parallelism: 4
-#     executor: my-executor
-#     resource_class: large
-#     steps:
-#       - installnode 
-#       - run: mkdir ~/junit
-#       - run: 
-#           name: Run Tests
-#           command: |
-#             TEST=$(circleci tests glob **/__tests__/*.js | circleci tests split --split-by=timings)
-#             npm run test:coverage $TEST
-#       - run: 
-#           command: cp test-results/junit.xml ~/junit
-#       - store_test_results:
-#           path: ~/junit
-#       - store_artifacts:
-#           path: ~/junit
+# reusable commands: can be called as steps in any job(s) in this config
+commands:
+  installnode:
+    description: "Install and cache node"
+    steps:
+      - checkout
+      - run: 
+          name: Node Version
+          command: node --version
+      - restore_cache:
+          keys: 
+            - dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - dependency-cache-v1-{{ .Branch }}
+            - dependency-cache-v1-
+      - run: 
+          name: NPM Install
+          command: npm install --legacy-peer-deps  
+      - save_cache:
+          paths:
+            - ./node_modules
+          key: dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}  
+# builing blocks of ci/cd
+jobs:
+  build:
+    executor: my-executor
+    steps:
+    # DLC does nothing here, its caching depends on commonality of the image layers.
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - installnode
+  lint: 
+    executor: my-executor
+    resource_class: small
+    steps:
+      - installnode
+      - run:
+          name: Run Linting
+          command: npm run lint
+  test: 
+    parallelism: 4
+    executor: my-executor
+    resource_class: large
+    steps:
+      - installnode 
+      - run: mkdir ~/junit
+      - run: 
+          name: Run Tests
+          command: |
+            TEST=$(circleci tests glob **/__tests__/*.js | circleci tests split --split-by=timings)
+            npm run test:coverage $TEST
+      - run: 
+          command: cp test-results/junit.xml ~/junit
+      - store_test_results:
+          path: ~/junit
+      - store_artifacts:
+          path: ~/junit
   
   ###########################################################################################################################
   ## setup workflows ##
-version: 2.1 
+# version: 2.1 
 
-setup: true
+# setup: true
 
-orbs:
-  path-filtering: circleci/path-filtering@0.0.2
+# orbs:
+#   path-filtering: circleci/path-filtering@0.0.2
 
-workflows:
-  setup-workflow:
-    jobs:
-      - path-filtering/filter:
-          mapping: |
-            src/.* test-src true
-            back-end/.* back-end true
-            .circleci/.* circle-ci true
-          # Optional, defaults to main:
-          base-revision: origin/main
+# workflows:
+#   setup-workflow:
+#     jobs:
+#       - path-filtering/filter:
+#           mapping: |
+#             src/.* test-src true
+#             back-end/.* back-end true
+#             .circleci/.* circle-ci true
+#           # Optional, defaults to main:
+#           base-revision: origin/main
