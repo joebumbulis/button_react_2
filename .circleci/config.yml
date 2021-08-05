@@ -77,7 +77,7 @@ jobs:
   test: 
     parallelism: 4
     executor: my-executor
-    resource_class: large
+    # resource_class: large
     steps:
       - installnode 
       - run: mkdir ~/junit
