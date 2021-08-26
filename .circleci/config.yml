@@ -67,8 +67,8 @@ jobs:
       #     docker_layer_caching: true
       - installnode
   lint: 
-    executor: my-executor
-    resource_class: small
+    machine: true
+    resource_class: bumbulis/test-autorunner
     steps:
       - installnode
       - run:
