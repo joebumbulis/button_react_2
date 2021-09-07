@@ -6,3 +6,14 @@ The CircleCI [pipeline](https://app.circleci.com/pipelines/github/joebumbulis/bu
 Deployed [App](https://meow-button.herokuapp.com/).
 
 
+Docker commands:
+```
+docker run \
+    -it \
+    --rm \
+    -v ${PWD}:/app \
+    -v /app/node_modules \
+    -p 3001:3000 \
+    -e CHOKIDAR_USEPOLLING=true \
+    joebumbulis/cci-react-demo-app
+```
