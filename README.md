@@ -8,7 +8,7 @@ Deployed [App](https://meow-button.herokuapp.com/).
 #### Docker
 This `create-react-app` was containerized using [this](https://mherman.org/blog/dockerizing-a-react-app/) tutorial.
 
-*Docker commands*:
+### To run docker container:
 ```
 docker run \
     -it \
@@ -19,3 +19,9 @@ docker run \
     -e CHOKIDAR_USEPOLLING=true \
     joebumbulis/cci-react-demo-app
 ```
+1. `-it` interactive mode
+2. `--rm` removes container and volumes after container exits
+3. `-v ${PWD}:/app` mounts the code into the container at "/app"
+4. `-v /app/node_modules` in order to use the container version of the node_modules folder, we configured another volume: -v /app/node_modules. Thus, you should be able to remove the local "node_modules" folder.
+5. `-p 3000:3000` exposes port 3000
+
