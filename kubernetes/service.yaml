@@ -5,7 +5,6 @@ metadata:
 spec:
   type: LoadBalancer
   selector:
-    app: react_circle_prod
+    app: react-circle-prod
   ports:
-    - protocol: TCP
-      port: 3000
+    - port: 3000

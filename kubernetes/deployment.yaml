@@ -1,0 +1,19 @@
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: react-circle-prod
+spec:
+  selector:
+    matchLabels:
+      app: react-circle-prod
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: react-circle-prod
+    spec:
+      containers:
+      - name: cci-react-demo-app
+        image: gcr.io/optimal-sentry-327419/cci-react-demo-app
+        ports:
+        - containerPort: 3000
