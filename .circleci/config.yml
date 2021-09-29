@@ -44,9 +44,13 @@ workflows:
           # filters:
           #   branches:
           #     only: main
+      - hold-gke-deploy:
+          type: approval
+          requires:
+            - build-push-docker-image
       - gke-deploy:
           requires:
-            - hold
+            - hold-gke-deploy
           # filters:
           #   branches:
           #     only: main
