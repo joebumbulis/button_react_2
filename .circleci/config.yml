@@ -144,9 +144,10 @@ jobs:
       # Install `gcloud` and `kubectl` if not already installed.
       - gcp-gke/install
       # Initialize the `gcloud` CLI.
-      - gcp-gke/init
+      # - gcp-gke/init
       # Update a deployment Docker image.
       - gcp-gke/rollout-image:
+          cluster: circle-ci-cluster
           deployment: circle-ci-cluster
           container: react-circle-prod
           image: gcr.io/optimal-sentry-327419/cci-react-demo-app # change version when upda
