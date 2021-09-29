@@ -8,6 +8,8 @@ executors:
 
 orbs:
   heroku: circleci/heroku@1.2.6
+  gcp-gcr: circleci/gcp-gcr@0.13.0
+
 
 #orchestrate jobs: define dependencies, run order, and approval 
 workflows:
@@ -26,15 +28,27 @@ workflows:
           requires:
             - lint
             - test
-          filters: 
-            branches:
-              only: main
+          # filters: 
+          #   branches:
+          #     only: main
       - heroku/deploy-via-git:
           requires: 
             - hold
           filters:
             branches:
               only: main
+      - build-push-docker-image:
+          requires:
+            - hold
+          # filters:
+          #   branches:
+          #     only: main
+      - gke-deploy:
+          requires:
+            - hold
+          # filters:
+          #   branches:
+          #     only: main
 
 # reusable commands: can be called as steps in any job(s) in this config
 commands:
@@ -66,6 +80,7 @@ jobs:
       # - setup_remote_docker:
       #     docker_layer_caching: true
       - installnode
+
   lint: 
     executor: my-executor
     resource_class: small
@@ -74,6 +89,7 @@ jobs:
       - run:
           name: Run Linting
           command: npm run lint
+
   test: 
     parallelism: 4
     executor: my-executor
@@ -92,7 +108,47 @@ jobs:
           path: ~/junit
       - store_artifacts:
           path: ~/junit
-  
+  # build dcker image then push image to GCR
+  build-push-docker-image:
+    description: build and push image to Google Container Registry
+    machine: true
+    resource_class: large
+    steps:
+      - checkout
+      - gcr/gcr-auth
+      - gcr/build-image:
+          image: cci-react-demo-app
+          tag: v1 #Change version number when updating app, ie. v2
+      - gcr/push-image:
+          image: cci-react-demo-app
+          tag: v1 #Change version number when updating app, ie. v2
+      - store_artifacts:
+          path: /bin/app_build
+  #Deploy app to GKE
+  gke-deploy:
+    description: Deploy application to Google Kubernetes Engine
+    machine: true
+    resource_class: large
+    steps:
+      # - gcp-gcr/gcr-auth
+      # - gke/update-kubeconfig-with-credentials:
+      #     cluster: planted-cluster
+      #     install-kubectl: true
+      # - gke/rollout-image:
+      #     cluster: planted-cluster
+      #     deployment: planted-prod
+      #     container: planted-prod
+      #     image: gcr.io/circleci-demo-286921/planted-app
+      #     tag: $CIRCLE_SHA1
+      # Install `gcloud` and `kubectl` if not already installed.
+      - gcp-gke/install
+      # Initialize the `gcloud` CLI.
+      - gcp-gke/init
+      # Update a deployment Docker image.
+      - gcp-gke/rollout-image:
+          deployment: circle-ci-cluster
+          container: react-circle-prod
+          image: gcr.io/optimal-sentry-327419/cci-react-demo-app # change version when upda
 
 
 
