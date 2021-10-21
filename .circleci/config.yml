@@ -29,9 +29,9 @@ workflows:
           requires:
             - lint
             - test
-          # filters: 
-          #   branches:
-          #     only: main
+          filters: 
+            branches:
+              only: main
       - heroku/deploy-via-git:
           requires: 
             - hold
@@ -40,10 +40,7 @@ workflows:
               only: main
       - build-push-docker-image:
           requires:
-            - hold
-          # filters:
-          #   branches:
-          #     only: main
+            - test
       - hold-gke-deploy:
           type: approval
           requires:
@@ -51,9 +48,9 @@ workflows:
       - gke-deploy:
           requires:
             - hold-gke-deploy
-          # filters:
-          #   branches:
-          #     only: main
+          filters:
+            branches:
+              only: main
 
 # reusable commands: can be called as steps in any job(s) in this config
 commands:
@@ -82,8 +79,8 @@ jobs:
     executor: node
     steps:
     # DLC does nothing here, its caching depends on commonality of the image layers.
-      # - setup_remote_docker:
-      #     docker_layer_caching: true
+      - setup_remote_docker:
+          docker_layer_caching: true
       - installnode
 
   lint: 
@@ -136,19 +133,9 @@ jobs:
     resource_class: large
     steps:
       - gcp-gcr/gcr-auth
-      # - gke/update-kubeconfig-with-credentials:
-      #     cluster: planted-cluster
-      #     install-kubectl: true
-      # - gke/rollout-image:
-      #     cluster: planted-cluster
-      #     deployment: planted-prod
-      #     container: planted-prod
-      #     image: gcr.io/circleci-demo-286921/planted-app
-      #     tag: $CIRCLE_SHA1
       # Install `gcloud` and `kubectl` if not already installed.
       - gcp-gke/install
       # Initialize the `gcloud` CLI.
-      # - gcp-gke/init
       # Update a deployment Docker image.
       - gcp-gke/rollout-image:
           cluster: circle-ci-cluster
