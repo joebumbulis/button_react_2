@@ -24,7 +24,7 @@ workflows:
       - test:
           requires:
             - build
-      - hold:
+      - hold-heroku-deploy:
           type: approval
           requires:
             - lint
@@ -34,7 +34,7 @@ workflows:
               only: main
       - heroku/deploy-via-git:
           requires: 
-            - hold
+            - hold-heroku-deploy
           filters:
             branches:
               only: main
@@ -45,6 +45,9 @@ workflows:
           type: approval
           requires:
             - build-push-docker-image
+          filters:
+            branches:
+              only: main
       - gke-deploy:
           requires:
             - hold-gke-deploy
