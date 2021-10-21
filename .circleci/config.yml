@@ -152,7 +152,7 @@ jobs:
       # Update a deployment Docker image.
       - gcp-gke/rollout-image:
           cluster: circle-ci-cluster
-          deployment: circle-ci-cluster
+          deployment: react-circle-prod
           container: react-circle-prod
           image: gcr.io/optimal-sentry-327419/cci-react-demo-app # change version when updated
 
