@@ -1,13 +1,16 @@
 version: 2.1
 #reusable executors: define build environment (container or vm) that can be used to run any job(s) in this config
 executors:
-  my-executor:
+  node:
      docker:
       - image: cimg/node:15.6.0
     # resource_class: large
 
 orbs:
   heroku: circleci/heroku@1.2.6
+  gcp-gcr: circleci/gcp-gcr@0.13.0
+  gcp-gke: circleci/gcp-gke@1.3.0
+
 
 #orchestrate jobs: define dependencies, run order, and approval 
 workflows:
@@ -21,7 +24,7 @@ workflows:
       - test:
           requires:
             - build
-      - hold:
+      - hold-heroku-deploy:
           type: approval
           requires:
             - lint
@@ -31,7 +34,24 @@ workflows:
               only: main
       - heroku/deploy-via-git:
           requires: 
-            - hold
+            - hold-heroku-deploy
+          filters:
+            branches:
+              only: main
+      - build-push-docker-image:
+          requires:
+            - lint
+            - test
+      - hold-gke-deploy:
+          type: approval
+          requires:
+            - build-push-docker-image
+          filters:
+            branches:
+              only: main
+      - gke-deploy:
+          requires:
+            - hold-gke-deploy
           filters:
             branches:
               only: main
@@ -60,23 +80,25 @@ commands:
 # builing blocks of ci/cd
 jobs:
   build:
-    executor: my-executor
+    executor: node
     steps:
     # DLC does nothing here, its caching depends on commonality of the image layers.
-      # - setup_remote_docker:
-      #     docker_layer_caching: true
+      - setup_remote_docker:
+          docker_layer_caching: true
       - installnode
+
   lint: 
-    executor: my-executor
+    executor: node
     resource_class: small
     steps:
       - installnode
       - run:
           name: Run Linting
           command: npm run lint
+
   test: 
     parallelism: 4
-    executor: my-executor
+    executor: node
     resource_class: large
     steps:
       - installnode 
@@ -92,7 +114,38 @@ jobs:
           path: ~/junit
       - store_artifacts:
           path: ~/junit
-  
+  # build dcker image then push image to GCR
+  build-push-docker-image:
+    description: build and push image to Google Container Registry
+    machine: true
+    resource_class: large
+    steps:
+      - checkout
+      - gcp-gcr/gcr-auth
+      - gcp-gcr/build-image:
+          image: cci-react-demo-app
+          tag: v1 #Change version number when updating app, ie. v2
+      - gcp-gcr/push-image:
+          image: cci-react-demo-app
+          tag: v1 #Change version number when updating app, ie. v2
+      - store_artifacts:
+          path: /bin/app_build
+  #Deploy app to GKE
+  gke-deploy:
+    description: Deploy application to Google Kubernetes Engine
+    machine: true
+    resource_class: large
+    steps:
+      - gcp-gcr/gcr-auth
+      # Install `gcloud` and `kubectl` if not already installed.
+      - gcp-gke/install
+      # Initialize the `gcloud` CLI.
+      # Update a deployment Docker image.
+      - gcp-gke/rollout-image:
+          cluster: circle-ci-cluster
+          deployment: react-circle-prod
+          container: cci-react-demo-app
+          image: gcr.io/optimal-sentry-327419/cci-react-demo-app # change version when updated
 
 
 

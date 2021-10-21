@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: circle-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: react-circle-prod
+  ports:
+    - port: 3000
