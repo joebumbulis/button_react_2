@@ -1,7 +1,7 @@
 version: 2.1
 #reusable executors: define build environment (container or vm) that can be used to run any job(s) in this config
 executors:
-  my-executor:
+  node:
      docker:
       - image: cimg/node:15.6.0
     # resource_class: large
@@ -79,7 +79,7 @@ commands:
 # builing blocks of ci/cd
 jobs:
   build:
-    executor: my-executor
+    executor: node
     steps:
     # DLC does nothing here, its caching depends on commonality of the image layers.
       # - setup_remote_docker:
@@ -87,7 +87,7 @@ jobs:
       - installnode
 
   lint: 
-    executor: my-executor
+    executor: node
     resource_class: small
     steps:
       - installnode
@@ -97,7 +97,7 @@ jobs:
 
   test: 
     parallelism: 4
-    executor: my-executor
+    executor: node
     resource_class: large
     steps:
       - installnode 
