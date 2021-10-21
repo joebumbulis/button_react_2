@@ -135,7 +135,7 @@ jobs:
     machine: true
     resource_class: large
     steps:
-      # - gcp-gcp-gcr/gcr-auth
+      - gcp-gcp-gcr/gcr-auth
       # - gke/update-kubeconfig-with-credentials:
       #     cluster: planted-cluster
       #     install-kubectl: true
@@ -154,7 +154,7 @@ jobs:
           cluster: circle-ci-cluster
           deployment: circle-ci-cluster
           container: react-circle-prod
-          image: gcr.io/optimal-sentry-327419/cci-react-demo-app # change version when upda
+          image: gcr.io/optimal-sentry-327419/cci-react-demo-app # change version when updated
 
 
 
