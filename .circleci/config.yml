@@ -40,6 +40,7 @@ workflows:
               only: main
       - build-push-docker-image:
           requires:
+            - lint
             - test
       - hold-gke-deploy:
           type: approval
