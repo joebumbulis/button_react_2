@@ -135,7 +135,7 @@ jobs:
     machine: true
     resource_class: large
     steps:
-      - gcp-gcp-gcr/gcr-auth
+      - gcp-gcr/gcr-auth
       # - gke/update-kubeconfig-with-credentials:
       #     cluster: planted-cluster
       #     install-kubectl: true
