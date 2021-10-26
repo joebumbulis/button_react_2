@@ -30,13 +30,13 @@ workflows:
             - test
           filters: 
             branches:
-              only: main
+              only: /^staging-.*/
       - heroku/deploy-via-git:
           requires: 
             - hold-heroku-deploy
           filters:
             branches:
-              only: main
+              only: /^staging-.*/
       - build-push-docker-image:
           requires:
             - lint
