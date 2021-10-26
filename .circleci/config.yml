@@ -82,9 +82,6 @@ jobs:
   build:
     executor: node
     steps:
-    # DLC does nothing here, its caching depends on commonality of the image layers.
-      - setup_remote_docker:
-          docker_layer_caching: true
       - installnode
 
   lint: 
@@ -119,6 +116,7 @@ jobs:
     description: build and push image to Google Container Registry
     machine: true
     resource_class: large
+    docker_layer_caching: true
     steps:
       - checkout
       - gcp-gcr/gcr-auth
