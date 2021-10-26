@@ -4,8 +4,7 @@ executors:
   node:
      docker:
       - image: cimg/node:15.6.0
-    # resource_class: large
-
+ 
 orbs:
   heroku: circleci/heroku@1.2.6
   gcp-gcr: circleci/gcp-gcr@0.13.0
@@ -31,13 +30,13 @@ workflows:
             - test
           filters: 
             branches:
-              only: main
+              only: /^staging-.*/
       - heroku/deploy-via-git:
           requires: 
             - hold-heroku-deploy
           filters:
             branches:
-              only: main
+              only: /^staging-.*/
       - build-push-docker-image:
           requires:
             - lint
@@ -82,9 +81,6 @@ jobs:
   build:
     executor: node
     steps:
-    # DLC does nothing here, its caching depends on commonality of the image layers.
-      - setup_remote_docker:
-          docker_layer_caching: true
       - installnode
 
   lint: 
@@ -117,7 +113,9 @@ jobs:
   # build dcker image then push image to GCR
   build-push-docker-image:
     description: build and push image to Google Container Registry
-    machine: true
+    machine:
+      image: ubuntu-2004:202010-01
+      docker_layer_caching: true
     resource_class: large
     steps:
       - checkout
