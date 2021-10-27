@@ -5,10 +5,10 @@ This simple app is built in order to run a couple tests to practice setting up C
 The CircleCI [pipeline](https://app.circleci.com/pipelines/github/joebumbulis/button_react_2).
 Deployed [App](https://meow-button.herokuapp.com/).
 
-#### Docker
+### Docker
 This `create-react-app` was containerized using [this](https://mherman.org/blog/dockerizing-a-react-app/) tutorial.
 
-### To run docker container:
+#### To run docker container:
 ```
 docker run \
     -it \
@@ -25,3 +25,12 @@ docker run \
 4. `-v /app/node_modules` in order to use the container version of the node_modules folder, we configured another volume: -v /app/node_modules. Thus, you should be able to remove the local "node_modules" folder.
 5. `-p 3000:3000` exposes port 3000
 
+### Kubernetes
+View application at external IP: `35.199.47.162:3000`
+
+- This application is [deployed to GKE](https://circleci.com/blog/simplifying-your-ci-cd-build-pipeline-to-gke-with-circleci-orbs/) and the image is stored on GCP. 
+- Commands for gcloud:
+    - `gcloud projects list` - to get list of gcloud of projects
+    - `gcloud container clusters list` - get list of clusters along with info
+    - `kubectl config current-context` - to get current cluster context
+    - `kubectl get services` - access the application, get IP's for services
