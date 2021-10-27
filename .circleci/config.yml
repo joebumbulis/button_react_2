@@ -121,10 +121,10 @@ jobs:
       - gcp-gcr/gcr-auth
       - gcp-gcr/build-image:
           image: cci-react-demo-app
-          tag: v1 #Change version number when updating app, ie. v2
+          tag: v1-${CIRCLE_BUILD_NUM} #Change version number when updating app, ie. v2
       - gcp-gcr/push-image:
           image: cci-react-demo-app
-          tag: v1 #Change version number when updating app, ie. v2
+          tag: v1-${CIRCLE_BUILD_NUM} #Change version number when updating app, ie. v2
       - store_artifacts:
           path: /bin/app_build
   #Deploy app to GKE
@@ -141,7 +141,8 @@ jobs:
           cluster: circle-ci-cluster
           deployment: react-circle-prod
           container: cci-react-demo-app
-          image: gcr.io/optimal-sentry-327419/cci-react-demo-app # change version when updated
+          image: gcr.io/optimal-sentry-327419/cci-react-demo-app
+          tag: v1-${CIRCLE_BUILD_NUM} 
 
 
 
