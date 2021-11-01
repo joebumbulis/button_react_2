@@ -138,7 +138,7 @@ workflows:
       - hold:
           type: approval
           requires:
-            - backend
+            - back-end
           filters: 
             branches:
               only: main
