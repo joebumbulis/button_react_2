@@ -10,7 +10,7 @@ spec:
   template:
     metadata:
       labels:
-        app: react-circle-prod
+        app: react-circle-prods
     spec:
       containers:
       - name: cci-react-demo-app
