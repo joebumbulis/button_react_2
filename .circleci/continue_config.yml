@@ -1,12 +1,11 @@
 version: 2.1
 
 orbs:
-  # Uses the Continuation API #
   continuation: circleci/continuation@0.1.2
-  # Uses path filtering for mono support #
   path-filtering: circleci/path-filtering@0.0.2
-
   heroku: circleci/heroku@1.2.6
+  gcp-gcr: circleci/gcp-gcr@0.13.0
+  gcp-gke: circleci/gcp-gke@1.3.0
 
 executors:
   my-executor:
@@ -21,6 +20,9 @@ parameters:
     type: boolean
     default: false
   back-end:
+    type: boolean
+    default: false
+  kubes:
     type: boolean
     default: false
 
@@ -49,9 +51,6 @@ jobs:
   build:
     executor: my-executor
     steps:
-    # DLC does nothing here, its caching depends on commonality of the image layers.
-      - setup_remote_docker:
-          docker_layer_caching: true
       - installnode
   lint: 
     executor: my-executor
@@ -79,6 +78,40 @@ jobs:
           path: ~/junit
       - store_artifacts:
           path: ~/junit
+  # build dcker image then push image to GCR
+  build-push-docker-image:
+    description: build and push image to Google Container Registry
+    machine:
+      image: ubuntu-2004:202107-02
+      docker_layer_caching: true
+    resource_class: large
+    steps:
+      - checkout
+      - gcp-gcr/gcr-auth
+      - gcp-gcr/build-image:
+          image: cci-react-demo-app
+          tag: v1-${CIRCLE_SHA1} #Change version number when updating app, ie. v2
+      - gcp-gcr/push-image:
+          image: cci-react-demo-app
+          tag: v1-${CIRCLE_SHA1} #Change version number when updating app, ie. v2
+      - store_artifacts:
+          path: /bin/app_build
+  #Deploy app to GKE
+  gke-deploy:
+    description: Deploy application to Google Kubernetes Engine
+    machine: true
+    resource_class: large
+    steps:
+      - gcp-gcr/gcr-auth
+      # Install `gcloud` and `kubectl` if not already installed.
+      - gcp-gke/install
+      # Update a deployment Docker image.
+      - gcp-gke/rollout-image:
+          cluster: circle-ci-cluster
+          deployment: react-circle-prod
+          container: cci-react-demo-app
+          image: gcr.io/optimal-sentry-327419/cci-react-demo-app
+          tag: v1-${CIRCLE_SHA1} 
 
   back-end:
     machine: true
@@ -93,10 +126,28 @@ workflows:
     jobs:
       - build
 
+  kubes:
+    when: << pipeline.parameters.kubes >>
+    jobs:
+      - build 
+
   back-end:
     when: << pipeline.parameters.back-end >> 
     jobs:
       - back-end
+      - hold:
+          type: approval
+          requires:
+            - backend
+          filters: 
+            branches:
+              only: main
+      - heroku/deploy-via-git:
+          requires: 
+            - hold
+          filters:
+            branches:
+              only: main
     
   test-src:
     when: << pipeline.parameters.test-src >>
@@ -108,17 +159,20 @@ workflows:
       - test:
           requires:
             - build
-      - hold:
-          type: approval
+      - build-push-docker-image:
           requires:
             - lint
             - test
-          filters: 
+      - hold-gke-deploy:
+          type: approval
+          requires:
+            - build-push-docker-image
+          filters:
             branches:
               only: main
-      - heroku/deploy-via-git:
-          requires: 
-            - hold
+      - gke-deploy:
+          requires:
+            - hold-gke-deploy
           filters:
             branches:
               only: main
