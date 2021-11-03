@@ -34,3 +34,12 @@ View application at external IP: `35.199.47.162:3000`
     - `gcloud container clusters list` - get list of clusters along with info
     - `kubectl config current-context` - to get current cluster context
     - `kubectl get services` - access the application, get IP's for services
+
+    ### Slack Integration
+    - [Orb - Slack](https://circleci.com/developer/orbs/orb/circleci/slack)
+    - Slack Integration [Blog](https://circleci.com/blog/circleci-slack-integration/)
+    - Slack Setup on [Github](https://github.com/CircleCI-Public/slack-orb/wiki/Setup)
+    - Slack Orb [Wiki](https://github.com/CircleCI-Public/slack-orb/wiki) & [Wiki Setup](https://github.com/CircleCI-Public/slack-orb/wiki/Setup)
+    
+    - Currently [waiting](https://api.slack.com/apps/A024G8QG1NJ/oauth?) on step 3 of install instructions: `Install and Receive Token`. (Awaiting request approval)
+    - Once approved, need to also install app in channel, `#joeb-demo` in slack. 
