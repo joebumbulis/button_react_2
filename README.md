@@ -43,3 +43,4 @@ View application at external IP: `35.199.47.162:3000`
     
     - Currently [waiting](https://api.slack.com/apps/A024G8QG1NJ/oauth?) on step 3 of install instructions: `Install and Receive Token`. (Awaiting request approval)
     - Once approved, need to also install app in channel, `#joeb-demo` in slack. 
+    - Created ticket in `CircleCI Service Desk` asking for someone to approve my app. 
