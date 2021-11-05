@@ -43,7 +43,7 @@ workflows:
             - lint
             - test
       - slack/on-hold:
-          context: slack-creds
+          context: slack_creds
           requires:
             - build-push-docker-image
       - hold-gke-deploy:
