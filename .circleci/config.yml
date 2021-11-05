@@ -9,6 +9,7 @@ orbs:
   heroku: circleci/heroku@1.2.6
   gcp-gcr: circleci/gcp-gcr@0.13.0
   gcp-gke: circleci/gcp-gke@1.3.0
+  snyk: snyk/snyk@1.1.2
 
 
 #orchestrate jobs: define dependencies, run order, and approval 
@@ -24,6 +25,7 @@ workflows:
           requires:
             - build
       - hold-heroku-deploy:
+          context: docker-hub-creds
           type: approval
           requires:
             - lint
@@ -71,7 +73,9 @@ commands:
             - dependency-cache-v1-
       - run: 
           name: NPM Install
-          command: npm install --legacy-peer-deps  
+          command: npm install --legacy-peer-deps
+      - snyk/scan:
+          fail-on-issues: false 
       - save_cache:
           paths:
             - ./node_modules
@@ -123,6 +127,11 @@ jobs:
       - gcp-gcr/build-image:
           image: cci-react-demo-app
           tag: v1-${CIRCLE_SHA1} #Change version number when updating app, ie. v2
+      - snyk/scan:
+          severity-threshold: high
+          docker-image-name: joebumbulis/cci-react-demo-app:v1
+          target-file: "Dockerfile"
+          fail-on-issues: false
       - gcp-gcr/push-image:
           image: cci-react-demo-app
           tag: v1-${CIRCLE_SHA1} #Change version number when updating app, ie. v2
