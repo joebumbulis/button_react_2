@@ -40,7 +40,4 @@ View application at external IP: `35.199.47.162:3000`
     - Slack Integration [Blog](https://circleci.com/blog/circleci-slack-integration/)
     - Slack Setup on [Github](https://github.com/CircleCI-Public/slack-orb/wiki/Setup)
     - Slack Orb [Wiki](https://github.com/CircleCI-Public/slack-orb/wiki) & [Wiki Setup](https://github.com/CircleCI-Public/slack-orb/wiki/Setup)
-    
-    - Currently [waiting](https://api.slack.com/apps/A024G8QG1NJ/oauth?) on step 3 of install instructions: `Install and Receive Token`. (Awaiting request approval)
-    - Once approved, need to also install app in channel, `#joeb-demo` in slack. 
-    - Created ticket in `CircleCI Service Desk` asking for someone to approve my app. 
+ 
