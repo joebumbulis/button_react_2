@@ -9,6 +9,7 @@ orbs:
   heroku: circleci/heroku@1.2.6
   gcp-gcr: circleci/gcp-gcr@0.13.0
   gcp-gke: circleci/gcp-gke@1.3.0
+  slack: circleci/slack@4.4.4
   snyk: snyk/snyk@1.1.2
 
 
@@ -43,9 +44,14 @@ workflows:
           requires:
             - lint
             - test
+      - slack/on-hold:
+          context: slack_creds
+          requires:
+            - build-push-docker-image
       - hold-gke-deploy:
           type: approval
           requires:
+            - slack/on-hold
             - build-push-docker-image
           filters:
             branches:
