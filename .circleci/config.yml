@@ -118,10 +118,12 @@ jobs:
     description: build and push image to Google Container Registry
     machine:
       image: ubuntu-2004:202107-02
-      docker_layer_caching: true
+      # docker_layer_caching: true
     resource_class: large
     steps:
       - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
       - gcp-gcr/gcr-auth
       - gcp-gcr/build-image:
           image: cci-react-demo-app
