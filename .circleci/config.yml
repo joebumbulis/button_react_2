@@ -131,7 +131,7 @@ jobs:
           severity-threshold: high
           docker-image-name: joebumbulis/cci-react-demo-app:v1
           target-file: "Dockerfile"
-          fail-on-issues: true
+          fail-on-issues: false
       - gcp-gcr/push-image:
           image: cci-react-demo-app
           tag: v1-${CIRCLE_SHA1} #Change version number when updating app, ie. v2
