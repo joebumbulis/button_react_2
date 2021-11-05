@@ -80,8 +80,8 @@ commands:
       - run: 
           name: NPM Install
           command: npm install --legacy-peer-deps
-      - snyk/scan:
-          fail-on-issues: false 
+      # - snyk/scan:
+      #     fail-on-issues: false 
       - save_cache:
           paths:
             - ./node_modules
