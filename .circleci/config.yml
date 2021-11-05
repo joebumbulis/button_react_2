@@ -129,7 +129,7 @@ jobs:
           tag: v1-${CIRCLE_SHA1} #Change version number when updating app, ie. v2
       - snyk/scan:
           severity-threshold: high
-          docker-image-name: joebumbulis/cci-react-demo-app:v1-${CIRCLE_SHA1} 
+          docker-image-name: joebumbulis/cci-react-demo-app:v1
           target-file: "Dockerfile"
           fail-on-issues: true
       - gcp-gcr/push-image:
