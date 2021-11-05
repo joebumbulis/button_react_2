@@ -39,5 +39,5 @@ View application at external IP: `35.199.47.162:3000`
     - [Orb - Slack](https://circleci.com/developer/orbs/orb/circleci/slack)
     - Slack Integration [Blog](https://circleci.com/blog/circleci-slack-integration/)
     - Slack Setup on [Github](https://github.com/CircleCI-Public/slack-orb/wiki/Setup)
-    - Slack Orb [Wiki](https://github.com/CircleCI-Public/slack-orb/wiki) & [Wiki Setup](https://github.com/CircleCI-Public/slack-orb/wiki/Setup)
+  
  
