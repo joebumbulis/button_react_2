@@ -11,8 +11,6 @@ orbs:
   gcp-gke: circleci/gcp-gke@1.3.0
   slack: circleci/slack@4.4.4
   snyk: snyk/snyk@1.1.2
-
-
 #orchestrate jobs: define dependencies, run order, and approval 
 workflows:
   version: 2
@@ -86,8 +84,8 @@ commands:
           paths:
             - ./node_modules
           key: dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}  
-# builing blocks of ci/cd
-jobs:
+# building blocks of ci/cd
+jobs: 
   build:
     executor: node
     steps:
