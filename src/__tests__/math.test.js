@@ -2,7 +2,13 @@ import {
   sum, sub, multiply, divide,
 } from '../math';
 
+const flakyTestNumber = () => Math.floor(Math.random() * 3);
+
 describe('tests addition problems', () => {
+  test('flaky test', () => {
+    expect(sum(1, 1)).toEqual(flakyTestNumber);
+  });
+
   test('adds 3 + 2 to equal 5', () => {
     expect(sum(3, 2)).toEqual(5);
   });
