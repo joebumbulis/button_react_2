@@ -4,7 +4,7 @@ import {
 
 describe('tests addition problems', () => {
   test('flaky test', () => {
-    expect(sum(1, 1)).toEqual(() => Math.floor(Math.random() * 3));
+    expect(sum(1, 1)).toEqual(2);
   });
 
   test('adds 3 + 2 to equal 5', () => {
