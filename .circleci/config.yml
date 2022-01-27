@@ -11,7 +11,7 @@ orbs:
   gcp-gke: circleci/gcp-gke@1.3.0
   slack: circleci/slack@4.4.4
   # snyk: snyk/snyk@1.1.2
-  snyyyk:
+  snyk:
     commands:
       scan: 
         description: Scan the application dependencies for known vulnerabilities with Snyk. This command calls the others, and should be used as the command for scanning.
@@ -278,7 +278,7 @@ jobs:
       - gcp-gcr/build-image:
           image: cci-react-demo-app
           tag: v1-${CIRCLE_SHA1} #Change version number when updating app, ie. v2
-      - snyyyk/scan:
+      - snyk/scan:
           severity-threshold: high
           docker-image-name: joebumbulis/cci-react-demo-app:v1
           target-file: "Dockerfile"
