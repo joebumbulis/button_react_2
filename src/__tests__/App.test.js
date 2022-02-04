@@ -17,4 +17,18 @@ describe('general rendering', () => {
     fireEvent.click(button);
     expect(screen.getByText(/Right Meow/i)).toBeInTheDocument;
   });
+
+  it('renders click me too button', () => {
+    render(<App />);
+    const button = screen.getByText(/CLICK ME TOO ☕️/i);
+    expect(button).toBeInTheDocument();
+  });
+
+  it('calls onClick on second button click', () => {
+    render(<App />);
+    expect(/Shablow!💥😜/).not.toBeInTheDocument;
+    const button = screen.getByText(/CLICK ME TOO ☕️/i);
+    fireEvent.click(button);
+    expect(screen.getByText(/Shablow!💥😜/i)).toBeInTheDocument;
+  });
 })
