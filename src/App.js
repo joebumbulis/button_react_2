@@ -4,12 +4,12 @@ import Button from './button';
 
 function App() {
   const [displayText, setDisplayText] = useState(false);
-  const [displaySecondText, setSecondDisplayText] = useState(false);
+  const [displaySecondText, setCoffeeDisplayText] = useState(false);
 
   const textToDisplay = <div className="display-text">Right Meow!💥😸</div>;
   const secondText = <div className="display-text">Shablow!💥😜</div>;
   const buttonTitle = 'CLICK BUTTON 💣';
-  const secondButtonTitle = 'CLICK ME TOO ☕️';
+  const coffeeButtonTitle = 'CLICK ME TOO ☕️';
 
   return (
     <div className="App">
@@ -19,7 +19,7 @@ function App() {
 
         <p />
 
-        <Button onClick={() => setSecondDisplayText(true)} buttonTitle={secondButtonTitle} />
+        <Button onClick={() => setCoffeeDisplayText(true)} buttonTitle={coffeeButtonTitle} />
         {displaySecondText && secondText}
       </header>
     </div>
