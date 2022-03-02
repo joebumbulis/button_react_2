@@ -1,4 +1,17 @@
 version: 2.1
+
+parameters:
+  cleanup:
+    type: boolean
+    default: false
+    description: Should this run cleanup an old deploy?
+  version:
+    type: string
+    default: ""
+    description: the version (latest or prior) to be deleted
+  job_name:
+    type: string
+    default: delete deployment
 #reusable executors: define build environment (container or vm) that can be used to run any job(s) in this config
 executors:
   node:
@@ -8,15 +21,16 @@ executors:
 orbs:
   heroku: circleci/heroku@1.2.6
   gcp-gcr: circleci/gcp-gcr@0.13.0
-  gcp-gke: circleci/gcp-gke@1.3.0
   slack: circleci/slack@4.4.4
   snyk: snyk/snyk@1.1.2
+  kubernetes:   circleci/kubernetes@1.3.0
 
 
 #orchestrate jobs: define dependencies, run order, and approval 
 workflows:
   version: 2
   build-test-deploy:
+    unless: << pipeline.parameters.cleanup >>
     jobs:
       - build
       - lint:
@@ -55,16 +69,30 @@ workflows:
             - build-push-docker-image
           filters:
             branches:
-              only: main
-      - gke-deploy:
+              only: vamp
+      - update-deployment:
           requires:
             - hold-gke-deploy
           filters:
             branches:
-              only: main
-
+              only: vamp
+              
+  the-fixer:
+    when: << pipeline.parameters.cleanup >>
+    jobs:
+      - delete-deployment:
+          name: << pipeline.parameters.job_name >>
 # reusable commands: can be called as steps in any job(s) in this config
 commands:
+  set-build-env:
+      description: "Set environment variables needed for building"
+      steps:
+        - checkout
+        - run:
+            name: Setup Build Environment Variables
+            command: |
+              echo "export VERSION=$(cat VERSION)" >> $BASH_ENV
+              source $BASH_ENV
   installnode:
     description: "Install and cache node"
     steps:
@@ -129,38 +157,88 @@ jobs:
     resource_class: large
     steps:
       - checkout
+      - set-build-env
       - gcp-gcr/gcr-auth
       - gcp-gcr/build-image:
           image: cci-react-demo-app
-          tag: v1-${CIRCLE_SHA1} #Change version number when updating app, ie. v2
-      - snyk/scan:
-          severity-threshold: high
-          docker-image-name: joebumbulis/cci-react-demo-app:v1
-          target-file: "Dockerfile"
-          fail-on-issues: false
+          tag: ${VERSION} #Change version number when updating app, ie. v2
       - gcp-gcr/push-image:
           image: cci-react-demo-app
-          tag: v1-${CIRCLE_SHA1} #Change version number when updating app, ie. v2
+          tag: ${VERSION} #Change version number when updating app, ie. v2
       - store_artifacts:
           path: /bin/app_build
-  #Deploy app to GKE
-  gke-deploy:
-    description: Deploy application to Google Kubernetes Engine
-    machine: true
-    resource_class: large
+
+update-deployment:
+    docker: 
+      - image: cimg/base:edge-18.04
+    working_directory: ~/repo
     steps:
-      - gcp-gcr/gcr-auth
-      # Install `gcloud` and `kubectl` if not already installed.
-      - gcp-gke/install
-      # Update a deployment Docker image.
-      - gcp-gke/rollout-image:
-          cluster: circle-ci-cluster
-          deployment: react-circle-prod
-          container: cci-react-demo-app
-          image: gcr.io/optimal-sentry-327419/cci-react-demo-app
-          tag: v1-${CIRCLE_SHA1} 
+      - checkout
+      - run: sudo apt-get update && sudo apt-get install gettext-base graphviz
+      - set-build-env
+      - run: 
+          name: Update image & version in manifest
+          command: |
+            envsubst < vamp/demo-deployment.yml > modified-deployment.yaml
+            cat modified-deployment.yaml
+      - kubernetes/install-kubectl
+      - run:
+          name: Create minimal kubeconfig for Service Account
+          command: |
+            export DECODED_TOKEN=$(echo ${SE_DEMO_CLUSTER_CCI_USER_TOKEN} | base64 -d)
+            echo LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM1ekNDQWMrZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRJeU1ETXdNakUxTlRRMU4xb1hEVE15TURJeU9ERTFOVFExTjFvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTERSCmcwdHMxWlE5Q0tMb09SaGFiV3c5UGZudU9Vb2p0WW5ibzlwcVZBQWdVSGk4bngrbDZHWVBUNEdmNDJ5RGJIMUUKRUZNU0hGZDRPUWtGSjkvbko5ajRtWFEydXMzeERoSWZ6VUxYYnF0cEh2MlA5WGJOZzNFTzVyNE5tdi9PdFhJbgp4aVVTaW9uczUzdnhLbG5hNW1SY09DWWRESm5zUWVoWDUxTTNxczJBK01ienpWR1BoZlczQmF1VGl5d3h2Si9yClMvcGw2ZWMzQ0UxMXQvUlY0eVZlUVZvK2NXTFJsbFJGa1F2aDc1MzNnMXp4dlc0Z1hQell6cHhzZ2x5ci9pL3UKYzZVTHM4WXRNWjNwekNnYmsrRFJOSVMwMkkrdFk0YURRUWxHTXJsejkwWEVmcVJjT0dIc0x0OFZUV3NPei9WMQpMTU04aUV2ZEhvOEV6QW1KeExFQ0F3RUFBYU5DTUVBd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0hRWURWUjBPQkJZRUZGK3NnV21LK2JBT3Zjb01ERUhsYTIyTGNZanRNQTBHQ1NxR1NJYjMKRFFFQkN3VUFBNElCQVFDaHh0Qm10QlFDMlpFVk42czlrMDQ4NGl2OThwRjBYM1JPV3lwM2RSYk8vakpDRjFjSQp5QUxJY1FVRnhPNEFVMU9NZ2d2RHdDcXVWc3FKdHFIMklDcXRqbkFCOVVPNFdGUnZUV1pSK3pSelk5aktrOWVVCnZqZ2Y3NnlCekN0WmFURlorYlNub0VtUHp6REQrV3lONU9yWStPLzcyeXc0MFpGd3IzSXpGZFZPM0dFcHNJRS8KNVJ1RHpJc2tycUt5MklaUW5ybUR3TU4wbGtMLzNEL05EOHJ5ZC9ZS2xXdDJmNUdGcGtGQ0R1aTVhOUpLTHk2QgpkZGlYUzVPUllocWRrelcvSUh0OTRldUJaYTlSbTdoREkrZ0dxVHhaVi9pV2I5UE1oOEhCWjdUUlRQckI3QXRNCkFyOWdrOFZtb0wxMWJjV0RsNTJBUE4wWi9WbWVTRWVtcThGeAotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg== | base64 -d > ca.crt
+            kubectl config set-cluster joe-bum-dev-1 --server=https://CD3D09D62E5D5BACCCF26E9447400FE5.sk1.us-west-2.eks.amazonaws.com --certificate-authority=ca.crt
+            kubectl config set-credentials joebot --token=${DECODED_TOKEN}
+            kubectl config set-context cci --user=joebot --namespace=production --cluster=joe-bum-dev-1
+            kubectl config use-context cci
+      - kubernetes/create-or-update-resource:
+          namespace: production
+          resource-file-path: modified-deployment.yaml
+      - run: kubectl rollout status -f modified-deployment.yaml
+      - run:
+          name: Capture Contour routes as DAG
+          command: |
+            sleep 10 
+            # let release agent catch deploy, tell contour to shape traffic. 
+            # must be a smarter way
+            vamp/get-dag-as-dot.sh
+            cat contour-dag.dot
+      - store_artifacts:
+          path: contour-dag.png
+    environment:
+      DOCKER_IMAGE: circleci-demo-app
 
-
+delete-deployment:
+  docker: 
+    - image: cimg/base:edge-18.04
+  working_directory: ~/repo
+  steps:
+    - checkout
+    - run: sudo apt-get update && sudo apt-get install graphviz
+    - kubernetes/install-kubectl
+    - run:
+        name: Create minimal kubeconfig for Service Account
+        command: |
+          export DECODED_TOKEN=$(echo ${SE_DEMO_CLUSTER_CCI_USER_TOKEN} | base64 -d)
+          echo LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM1ekNDQWMrZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRJeU1ETXdNakUxTlRRMU4xb1hEVE15TURJeU9ERTFOVFExTjFvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTERSCmcwdHMxWlE5Q0tMb09SaGFiV3c5UGZudU9Vb2p0WW5ibzlwcVZBQWdVSGk4bngrbDZHWVBUNEdmNDJ5RGJIMUUKRUZNU0hGZDRPUWtGSjkvbko5ajRtWFEydXMzeERoSWZ6VUxYYnF0cEh2MlA5WGJOZzNFTzVyNE5tdi9PdFhJbgp4aVVTaW9uczUzdnhLbG5hNW1SY09DWWRESm5zUWVoWDUxTTNxczJBK01ienpWR1BoZlczQmF1VGl5d3h2Si9yClMvcGw2ZWMzQ0UxMXQvUlY0eVZlUVZvK2NXTFJsbFJGa1F2aDc1MzNnMXp4dlc0Z1hQell6cHhzZ2x5ci9pL3UKYzZVTHM4WXRNWjNwekNnYmsrRFJOSVMwMkkrdFk0YURRUWxHTXJsejkwWEVmcVJjT0dIc0x0OFZUV3NPei9WMQpMTU04aUV2ZEhvOEV6QW1KeExFQ0F3RUFBYU5DTUVBd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0hRWURWUjBPQkJZRUZGK3NnV21LK2JBT3Zjb01ERUhsYTIyTGNZanRNQTBHQ1NxR1NJYjMKRFFFQkN3VUFBNElCQVFDaHh0Qm10QlFDMlpFVk42czlrMDQ4NGl2OThwRjBYM1JPV3lwM2RSYk8vakpDRjFjSQp5QUxJY1FVRnhPNEFVMU9NZ2d2RHdDcXVWc3FKdHFIMklDcXRqbkFCOVVPNFdGUnZUV1pSK3pSelk5aktrOWVVCnZqZ2Y3NnlCekN0WmFURlorYlNub0VtUHp6REQrV3lONU9yWStPLzcyeXc0MFpGd3IzSXpGZFZPM0dFcHNJRS8KNVJ1RHpJc2tycUt5MklaUW5ybUR3TU4wbGtMLzNEL05EOHJ5ZC9ZS2xXdDJmNUdGcGtGQ0R1aTVhOUpLTHk2QgpkZGlYUzVPUllocWRrelcvSUh0OTRldUJaYTlSbTdoREkrZ0dxVHhaVi9pV2I5UE1oOEhCWjdUUlRQckI3QXRNCkFyOWdrOFZtb0wxMWJjV0RsNTJBUE4wWi9WbWVTRWVtcThGeAotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg== | base64 -d > ca.crt
+          kubectl config set-cluster joe-bum-dev-1 --server=https://CD3D09D62E5D5BACCCF26E9447400FE5.sk1.us-west-2.eks.amazonaws.com --certificate-authority=ca.crt
+          kubectl config set-credentials joebot --token=${DECODED_TOKEN}
+          kubectl config set-context cci --user=joebot --namespace=production --cluster=joe-bum-dev-1
+          kubectl config use-context cci
+    
+    - run:
+        name: Delete deployment << pipeline.parameters.version >>
+        command: kubectl -n production delete deployment circleci-demo-app-v<<pipeline.parameters.version>>
+    - run:
+        name: Capture Contour routes as DAG
+        command: |
+          sleep 2 
+          # let release agent catch deploy, tell contour to shape traffic. 
+          # must be a smarter way
+          vamp/get-dag-as-dot.sh
+          cat contour-dag.dot
+    - store_artifacts:
+        path: contour-dag.png
 
 
 

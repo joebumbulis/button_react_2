@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cci-react-demo-app-v${VERSION}
+  namespace: production
+  labels:
+    app: cci-react-demo-app
+    version: "${VERSION}"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cci-react-demo-app
+      version: "${VERSION}"
+  template:
+    metadata:
+      labels:
+        app: cci-react-demo-app
+        version: "${VERSION}"
+    spec:
+      containers:
+      - name: cci-react-demo-app
+        imagePullPolicy: Always
+        image: "gcr.io/optimal-sentry-327419/cci-react-demo-app:${VERSION}"
+        ports:
+        - containerPort: 3000
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+            scheme: HTTP
+          failureThreshold: 1
+        resources:
+          limits:
+            memory: 512Mi
+          requests:
+            memory: 128Mi
