@@ -205,8 +205,6 @@ jobs:
             cat contour-dag.dot
       - store_artifacts:
           path: contour-dag.png
-    environment:
-      DOCKER_IMAGE: circleci-demo-app
 
   delete-deployment:
     docker: 
@@ -227,7 +225,7 @@ jobs:
             kubectl config use-context cci
       - run:
           name: Delete deployment << pipeline.parameters.version >>
-          command: kubectl -n production delete deployment circleci-demo-app-v<<pipeline.parameters.version>>
+          command: kubectl -n production delete deployment cci-react-demo-app-v<<pipeline.parameters.version>>
       - run:
           name: Capture Contour routes as DAG
           command: |
