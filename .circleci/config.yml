@@ -72,7 +72,7 @@ workflows:
               only: vamp
       - update-deployment:
           requires:
-            - hold-gke-deploy
+            - hold-vamp-deploy
           filters:
             branches:
               only: vamp
