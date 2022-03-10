@@ -1,18 +1,15 @@
 import './styling/App.css';
-import React, { useState } from 'react';
-import Button from './button';
+import React from 'react';
+import Pricing from './Pricing';
+// import CustomButton from './customButton';
 
 function App() {
-  const [displayText, setDisplayText] = useState(false);
-
-  const textToDisplay = <div className="display-text">Right Meow!💥😸</div>;
+  // const [displayText, setDisplayText] = useState(false);
 
   return (
     <div className="App">
-      <header className="App-header">
-        <Button onClick={() => setDisplayText(true)} />
-        {displayText && textToDisplay}
-      </header>
+      <Pricing />
+      {/* <CustomButton onClick={setDisplayText} displayText={displayText} /> */}
     </div>
   );
 }
