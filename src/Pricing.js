@@ -14,13 +14,16 @@ import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import Container from '@mui/material/Container';
+import configuration from './config';
 
 function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        Version:
+        {' '}
+        {configuration.version}
       </Link>
       {' '}
       {new Date().getFullYear()}
@@ -106,9 +109,7 @@ function PricingContent() {
         sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
       >
         <Toolbar sx={{ flexWrap: 'wrap' }}>
-          <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
-            Company name
-          </Typography>
+          <Typography variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }} />
           <nav>
             <Link
               variant="button"
@@ -149,7 +150,9 @@ function PricingContent() {
           color="text.primary"
           gutterBottom
         >
-          Pricing
+          Version:
+          {' '}
+          {configuration.version}
         </Typography>
         <Typography variant="h5" align="center" color="text.secondary" component="p">
           Quickly build an effective pricing table for your potential customers with
