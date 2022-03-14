@@ -2,7 +2,7 @@
 // const envSettings = window;
 
 const configuration = {
-  version: '3.0.4',
+  version: '3.1.0',
 };
 
 export default configuration;
