@@ -37,35 +37,32 @@ const tiers = [
     title: 'Free',
     price: '0',
     description: [
-      '10 users included',
-      '2 GB of storage',
-      'Help center access',
-      'Email support',
+      'Do more with your minutes.',
+      'Give your team the best CI/CD.',
+      'Cloud.',
+
     ],
-    buttonText: 'Sign up for free',
+    buttonText: 'Start for free',
     buttonVariant: 'outlined',
   },
   {
-    title: 'Pro',
-    subheader: 'Most popular',
+    title: 'Performance',
+    subheader: 'Flexible',
     price: '15',
     description: [
-      '20 users included',
-      '10 GB of storage',
-      'Help center access',
-      'Priority email support',
+      'Pay for what you use.',
+      'Build with the flexibility your business requires.',
+      'Cloud.',
     ],
     buttonText: 'Get started',
     buttonVariant: 'contained',
   },
   {
-    title: 'Enterprise',
-    price: '30',
+    title: 'Scale',
+    price: '2000',
     description: [
-      '50 users included',
-      '30 GB of storage',
-      'Help center access',
-      'Phone & email support',
+      'Enterprise-level confidence and support for teams who deliver.',
+      'Cloud.',
     ],
     buttonText: 'Contact us',
     buttonVariant: 'outlined',
@@ -80,11 +77,11 @@ const footers = [
   {
     title: 'Features',
     description: [
-      'Cool stuff',
-      'Random feature',
-      'Team feature',
-      'Developer stuff',
-      'Another one',
+      'Parallelism',
+      'Orbs',
+      'Caching',
+      'Extendable',
+      'Insights',
     ],
   },
   {
@@ -155,9 +152,7 @@ function PricingContent() {
           {configuration.version}
         </Typography>
         <Typography variant="h5" align="center" color="text.secondary" component="p">
-          Quickly build an effective pricing table for your potential customers with
-          this layout. It&apos;s built with default MUI components with little
-          customization.
+          Build with the best. Get the most, for free. Industry leaders use CircleCI to build better software, faster.
         </Typography>
       </Container>
       {/* End hero unit */}
@@ -218,7 +213,15 @@ function PricingContent() {
                   </ul>
                 </CardContent>
                 <CardActions>
-                  <Button fullWidth variant={tier.buttonVariant}>
+                  <Button
+                    fullWidth
+                    variant={tier.buttonVariant}
+                    sx={{
+                      backgroundColor: '#049B4A',
+                      color: '#FFF',
+                      borderColor: '#049B4A',
+                    }}
+                  >
                     {tier.buttonText}
                   </Button>
                 </CardActions>
