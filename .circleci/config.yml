@@ -111,7 +111,7 @@ jobs:
       - run: 
           name: Run Tests
           command: |
-            TEST=$(circleci tests "glob **/__tests__/*.js" | circleci tests split --split-by=timings)
+            TEST=$(circleci tests glob **/__tests__/*.js | circleci tests split --split-by=timings)
             npm run test:coverage $TEST
       - run: 
           command: cp test-results/junit.xml ~/junit
