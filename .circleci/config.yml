@@ -55,7 +55,7 @@ workflows:
           #   branches:
           #     only: main
       - gke-deploy:
-          context: oic-context
+          context: oidc-context
           requires:
             - hold-gke-deploy
           # filters:
