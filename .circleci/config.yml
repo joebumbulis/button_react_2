@@ -25,7 +25,6 @@ workflows:
           requires:
             - build
       - hold-heroku-deploy:
-          context: docker-hub-creds
           type: approval
           requires:
             - lint
@@ -48,19 +47,20 @@ workflows:
           requires:
             - build-push-docker-image
       - hold-gke-deploy:
+          context: my-context
           type: approval
           requires:
             - slack/on-hold
             - build-push-docker-image
-          filters:
-            branches:
-              only: main
+          # filters:
+          #   branches:
+          #     only: main
       - gke-deploy:
           requires:
             - hold-gke-deploy
-          filters:
-            branches:
-              only: main
+          # filters:
+          #   branches:
+          #     only: main
 
 # reusable commands: can be called as steps in any job(s) in this config
 commands:
