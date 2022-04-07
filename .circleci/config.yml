@@ -47,7 +47,7 @@ workflows:
           requires:
             - build-push-docker-image
       - hold-gke-deploy:
-          context: my-context
+          context: slack_creds
           type: approval
           requires:
             - slack/on-hold
@@ -56,7 +56,7 @@ workflows:
           #   branches:
           #     only: main
       - gke-deploy:
-          context: my-context
+          context: slack_creds
           requires:
             - hold-gke-deploy
           # filters:
