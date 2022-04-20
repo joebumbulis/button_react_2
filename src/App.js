@@ -8,8 +8,8 @@ function App() {
 
   const textToDisplay = <div className="display-text">Right Meow!💥😸</div>;
   const secondText = <div className="display-text">Shablow!💥😜</div>;
-  const buttonTitle = 'CLICK BUTTON 💣';
   const coffeeButtonTitle = 'CLICK ME TOO ☕️';
+  const buttonTitle = 'CLICK BUTTON 💣';
 
   return (
     <div className="App">
