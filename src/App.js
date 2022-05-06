@@ -9,12 +9,12 @@ function App() {
   const textToDisplay = <div className="display-text">Right Meow!💥😸</div>;
   const secondText = <div className="display-text">Shablow!💥😜</div>;
   const coffeeButtonTitle = 'CLICK ME TOO ☕️';
-  const buttonTitles = 'CLICK BUTTON 💣';
+  const bombButtonTitle = 'CLICK BUTTON 💣';
 
   return (
     <div className="App">
       <header className="App-header">
-        <Button onClick={() => setDisplayText(true)} buttonTitle={buttonTitle} />
+        <Button onClick={() => setDisplayText(true)} buttonTitle={bombButtonTitle} />
         {displayText && textToDisplay}
 
         <p />
