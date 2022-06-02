@@ -20,11 +20,10 @@ function App() {
         <p />
 
         <Button onClick={() => setCoffeeDisplayText(true)} buttonTitle={coffeeButtonTitle} />
+        {displaySecondText && secondText}
       </header>
-        <div>.<div/>
     </div>
   );
 }
 
 export default App;
-        {displaySecondText && secondText}
