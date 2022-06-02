@@ -9,7 +9,7 @@ function App() {
   const textToDisplay = <div className="display-text">Right Meow!💥😸</div>;
   const secondText = <div className="display-text">Shablow!💥😜</div>;
   const coffeeButtonTitle = 'CLICK ME TOO ☕️';
-  const bombButtonTitle = 'CLICK BUTTON 💣';
+  const bombButtonTitle = 'CLICK  💣';
 
   return (
     <div className="App">
