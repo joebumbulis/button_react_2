@@ -8,8 +8,10 @@ function App() {
 
   const textToDisplay = <div className="display-text">Right Meow!💥😸</div>;
   const secondText = <div className="display-text">Shablow!💥😜</div>;
+  const lastText = <div className="display-text">Kablow!💥💥</div>;
   const coffeeButtonTitle = 'CLICK ME TOO ☕️';
   const bombButtonTitle = 'CLICK BUTTON 💣';
+  const lastButtonTitle = 'CLICK BUTTON 💣';
 
   return (
     <div className="App">
@@ -21,6 +23,10 @@ function App() {
 
         <Button onClick={() => setCoffeeDisplayText(true)} buttonTitle={coffeeButtonTitle} />
         {displaySecondText && secondText}
+
+        <p />
+        <Button onClick={() => setCoffeeDisplayText(true)} buttonTitle={lastButtonTitle} />
+        {displaySecondText && lastText}
       </header>
     </div>
   );
