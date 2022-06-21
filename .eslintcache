@@ -1,1 +1,73 @@
-[{"/Users/joe_bumbulis/Documents/CircleCI/Code/circle_ci_challenges/button_react_2/src/index.js":"1","/Users/joe_bumbulis/Documents/CircleCI/Code/circle_ci_challenges/button_react_2/src/App.js":"2","/Users/joe_bumbulis/Documents/CircleCI/Code/circle_ci_challenges/button_react_2/src/reportWebVitals.js":"3","/Users/joe_bumbulis/Documents/CircleCI/Code/circle_ci_challenges/button_react_2/src/button.js":"4"},{"size":509,"mtime":1623872691821,"results":"5","hashOfConfig":"6"},{"size":899,"mtime":1646845651345,"results":"7","hashOfConfig":"6"},{"size":375,"mtime":1623872691824,"results":"8","hashOfConfig":"6"},{"size":392,"mtime":1646845651396,"results":"9","hashOfConfig":"6"},{"filePath":"10","messages":"11","errorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},"1uwiskq",{"filePath":"12","messages":"13","errorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"14","messages":"15","errorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},{"filePath":"16","messages":"17","errorCount":0,"warningCount":0,"fixableErrorCount":0,"fixableWarningCount":0},"/Users/joe_bumbulis/Documents/CircleCI/Code/circle_ci_challenges/button_react_2/src/index.js",[],"/Users/joe_bumbulis/Documents/CircleCI/Code/circle_ci_challenges/button_react_2/src/App.js",[],"/Users/joe_bumbulis/Documents/CircleCI/Code/circle_ci_challenges/button_react_2/src/reportWebVitals.js",[],"/Users/joe_bumbulis/Documents/CircleCI/Code/circle_ci_challenges/button_react_2/src/button.js",[]]
+[
+  {
+    "/Users/joe_bumbulis/Documents/CircleCI/Code/circle_ci_challenges/button_react_2/src/index.js": "1",
+    "/Users/joe_bumbulis/Documents/CircleCI/Code/circle_ci_challenges/button_react_2/src/App.js": "2",
+    "/Users/joe_bumbulis/Documents/CircleCI/Code/circle_ci_challenges/button_react_2/src/reportWebVitals.js": "3",
+    "/Users/joe_bumbulis/Documents/CircleCI/Code/circle_ci_challenges/button_react_2/src/button.js": "4"
+  },
+  {
+    "size": 509,
+    "mtime": 1623872691821,
+    "results": "5",
+    "hashOfConfig": "6"
+  },
+  {
+    "size": 899,
+    "mtime": 1646845651345,
+    "results": "7",
+    "hashOfConfig": "6"
+  },
+  {
+    "size": 375,
+    "mtime": 1623872691824,
+    "results": "8",
+    "hashOfConfig": "6"
+  },
+  {
+    "size": 392,
+    "mtime": 1646845651396,
+    "results": "9",
+    "hashOfConfig": "6"
+  },
+  {
+    "filePath": "10",
+    "messages": "11",
+    "errorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  "1uwiskq",
+  {
+    "filePath": "12",
+    "messages": "13",
+    "errorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "14",
+    "messages": "15",
+    "errorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  {
+    "filePath": "16",
+    "messages": "17",
+    "errorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0
+  },
+  "/Users/joe_bumbulis/Documents/CircleCI/Code/circle_ci_challenges/button_react_2/src/index.js",
+  [],
+  "/Users/joe_bumbulis/Documents/CircleCI/Code/circle_ci_challenges/button_react_2/src/App.js",
+  [],
+  "/Users/joe_bumbulis/Documents/CircleCI/Code/circle_ci_challenges/button_react_2/src/reportWebVitals.js",
+  [],
+  "/Users/joe_bumbulis/Documents/CircleCI/Code/circle_ci_challenges/button_react_2/src/button.js",
+  []
+]
