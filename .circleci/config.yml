@@ -119,7 +119,6 @@ jobs:
           path: ~/junit
       - store_artifacts:
           path: ~/junit
-          
   # build dcker image then push image to GCR
   build-push-docker-image:
     description: build and push image to Google Container Registry
