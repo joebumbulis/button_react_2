@@ -6,9 +6,9 @@ executors:
       - image: cimg/node:15.6.0
  
 orbs:
-  heroku: circleci/heroku@1.2.6
-  gcp-gcr: circleci/gcp-gcr@0.13.0
-  gcp-gke: circleci/gcp-gke@1.3.0
+  # heroku: circleci/heroku@1.2.6
+  # gcp-gcr: circleci/gcp-gcr@0.13.0
+  # gcp-gke: circleci/gcp-gke@1.3.0
   slack: circleci/slack@4.4.4
   snyk: snyk/snyk@1.1.2
  
@@ -17,6 +17,8 @@ workflows:
   version: 2
   build-test-deploy:
     jobs:
+      - oidc_testing:
+          context: aws_credentials
       - build
       - lint:
           requires:
@@ -24,43 +26,43 @@ workflows:
       - test:
           requires:
             - build
-      - hold-heroku-deploy:
-          context: docker-hub-creds
-          type: approval
-          requires:
-            - lint
-            - test
-          filters: 
-            branches:
-              only: /^staging-.*/
-      - heroku/deploy-via-git:
-          requires: 
-            - hold-heroku-deploy
-          filters:
-            branches:
-              only: /^staging-.*/
-      - build-push-docker-image:
-          requires:
-            - lint
-            - test
-      - slack/on-hold:
-          context: slack_creds
-          requires:
-            - build-push-docker-image
-      - hold-gke-deploy:
-          type: approval
-          requires:
-            - slack/on-hold
-            - build-push-docker-image
-          filters:
-            branches:
-              only: main
-      - gke-deploy:
-          requires:
-            - hold-gke-deploy
-          filters:
-            branches:
-              only: main
+      # - hold-heroku-deploy:
+      #     context: docker-hub-creds
+      #     type: approval
+      #     requires:
+      #       - lint
+      #       - test
+      #     filters: 
+      #       branches:
+      #         only: /^staging-.*/
+      # - heroku/deploy-via-git:
+      #     requires: 
+      #       - hold-heroku-deploy
+      #     filters:
+      #       branches:
+      #         only: /^staging-.*/
+      # - build-push-docker-image:
+      #     requires:
+      #       - lint
+      #       - test
+      # - slack/on-hold:
+      #     context: slack_creds
+      #     requires:
+      #       - build-push-docker-image
+      # - hold-gke-deploy:
+      #     type: approval
+      #     requires:
+      #       - slack/on-hold
+      #       - build-push-docker-image
+      #     filters:
+      #       branches:
+      #         only: main
+      # - gke-deploy:
+      #     requires:
+      #       - hold-gke-deploy
+      #     filters:
+      #       branches:
+      #         only: main
 
 # reusable commands: can be called as steps in any job(s) in this config
 commands:
@@ -87,6 +89,27 @@ commands:
           key: dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}  
 # building blocks of ci/cd
 jobs: 
+  oidc_testing:
+    docker:
+      - image: amazon/aws-cli
+    environment:
+      AWS_DEFAULT_REGION: ${AWS_REGION}
+    steps:
+      - run:
+          name: authenticate-and-interact
+          command: |
+            # use the OpenID Connect token to obtain AWS credentials
+            read -r AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN \<<< \
+              $(aws sts assume-role-with-web-identity \
+              --role-arn ${AWS_ARN} \
+              --role-session-name "CircleCI-${CIRCLE_WORKFLOW_ID}-${CIRCLE_JOB}" \
+              --web-identity-token $CIRCLE_OIDC_TOKEN \
+              --duration-seconds 3600 \
+              --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' \
+              --output text)
+            export AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
+            # interact with AWS
+            aws sts get-caller-identity
   build:
     executor: node
     steps:
@@ -120,44 +143,44 @@ jobs:
       - store_artifacts:
           path: ~/junit
   # build dcker image then push image to GCR
-  build-push-docker-image:
-    description: build and push image to Google Container Registry
-    machine:
-      image: ubuntu-2004:202107-02
-      docker_layer_caching: true
-    resource_class: large
-    steps:
-      - checkout
-      - gcp-gcr/gcr-auth
-      - gcp-gcr/build-image:
-          image: cci-react-demo-app
-          tag: v1-${CIRCLE_SHA1} #Change version number when updating app, ie. v2
-      - snyk/scan:
-          severity-threshold: high
-          docker-image-name: joebumbulis/cci-react-demo-app:v1
-          target-file: "Dockerfile"
-          fail-on-issues: false
-      - gcp-gcr/push-image:
-          image: cci-react-demo-app
-          tag: v1-${CIRCLE_SHA1} #Change version number when updating app, ie. v2
-      - store_artifacts:
-          path: /bin/app_build
+  # build-push-docker-image:
+  #   description: build and push image to Google Container Registry
+  #   machine:
+  #     image: ubuntu-2004:202107-02
+  #     docker_layer_caching: true
+  #   resource_class: large
+  #   steps:
+  #     - checkout
+  #     - gcp-gcr/gcr-auth
+  #     - gcp-gcr/build-image:
+  #         image: cci-react-demo-app
+  #         tag: v1-${CIRCLE_SHA1} #Change version number when updating app, ie. v2
+  #     - snyk/scan:
+  #         severity-threshold: high
+  #         docker-image-name: joebumbulis/cci-react-demo-app:v1
+  #         target-file: "Dockerfile"
+  #         fail-on-issuekubectl get svckubectl get svcs: false
+  #     - gcp-gcr/push-image:
+  #         image: cci-react-demo-app
+  #         tag: v1-${CIRCLE_SHA1} #Change version number when updating app, ie. v2
+  #     - store_artifacts:
+  #         path: /bin/app_build
   #Deploy app to GKE
-  gke-deploy:
-    description: Deploy application to Google Kubernetes Engine
-    machine: true
-    resource_class: large
-    steps:
-      - gcp-gcr/gcr-auth
-      # Install `gcloud` and `kubectl` if not already installed.
-      - gcp-gke/install
-      # Update a deployment Docker image.
-      - gcp-gke/rollout-image:
-          cluster: circle-ci-cluster
-          deployment: react-circle-prod
-          container: cci-react-demo-app
-          image: gcr.io/optimal-sentry-327419/cci-react-demo-app
-          tag: v1-${CIRCLE_SHA1} 
+  # gke-deploy:
+  #   description: Deploy application to Google Kubernetes Engine
+  #   machine: true
+  #   resource_class: large
+  #   steps:
+  #     - gcp-gcr/gcr-auth
+  #     # Install `gcloud` and `kubectl` if not already installed.
+  #     - gcp-gke/install
+  #     # Update a deployment Docker image.
+  #     - gcp-gke/rollout-image:
+  #         cluster: circle-ci-cluster
+  #         deployment: react-circle-prod
+  #         container: cci-react-demo-app
+  #         image: gcr.io/optimal-sentry-327419/cci-react-demo-app
+  #         tag: v1-${CIRCLE_SHA1} 
 
 
 
