@@ -94,7 +94,7 @@ jobs:
     steps:
       - cli/install
       - cli/setup
-      # - circleci policy create --context config --owner-id $ORG_ID --policy ../ci_policies/version.rego --name version_check
+      - circleci policy create --context config --owner-id $ORG_ID --policy ../ci_policies/version.rego --name version_check
   
   build:
     executor: node
