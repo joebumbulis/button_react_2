@@ -89,7 +89,6 @@ commands:
           key: dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}  
 # building blocks of ci/cd
 jobs: 
-
   enforce-policies:
     executor: cli/default
     steps:
