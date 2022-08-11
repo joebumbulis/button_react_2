@@ -11,14 +11,12 @@ orbs:
   gcp-gke: circleci/gcp-gke@1.3.0
   slack: circleci/slack@4.4.4
   snyk: snyk/snyk@1.1.2
-  cli: circleci/circleci-cli@0.1.9
  
 #orchestrate jobs: define dependencies, run order, and approval 
 workflows:
   version: 2
   build-test-deploy:
     jobs:
-      - enforce-policies
       - build
       - lint:
           requires:
@@ -89,14 +87,6 @@ commands:
           key: dependency-cache-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}  
 # building blocks of ci/cd
 jobs: 
-  enforce-policies:
-    docker:
-      - image: 'circleci/circleci-cli:latest'
-    steps:
-      - cli/install
-      - cli/setup
-      - run: circleci policy create --context config --owner-id $ORG_ID --policy ../ci_policies/version.rego --name version_check
-  
   build:
     executor: node
     steps:
