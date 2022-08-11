@@ -90,7 +90,8 @@ commands:
 # building blocks of ci/cd
 jobs: 
   enforce-policies:
-    executor: cli/default
+    docker:
+      - image: 'circleci/circleci-cli:latest'
     steps:
       - cli/install
       - cli/setup
