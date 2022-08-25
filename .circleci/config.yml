@@ -104,7 +104,7 @@ jobs:
   test: 
     parallelism: 4
     executor: node
-    resource_class: large
+    resource_class: xlarge
     steps:
       - installnode 
       - run: mkdir ~/junit
