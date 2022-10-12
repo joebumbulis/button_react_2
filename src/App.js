@@ -1,6 +1,6 @@
-import './styling/App.css';
 import React, { useState } from 'react';
 import Button from './button';
+import './styling/App.css';
 
 function App() {
   const [displayText, setDisplayText] = useState(false);
