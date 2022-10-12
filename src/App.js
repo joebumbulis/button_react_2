@@ -11,7 +11,7 @@ function App() {
   const secondText = <div className="display-text">Shablow!💥😜</div>;
   const lastText = <div className="display-text">Kablow!💥😜</div>;
   const coffeeButtonTitle = 'CLICK ME TOO ☕️';
-  const bombButtonTitle = 'CLICK BUTTON 💣';
+  const bombButtonTitle = 'CLICK 💣';
   const lastButtonTitle = 'CLICKETY TADA';
 
   return (
