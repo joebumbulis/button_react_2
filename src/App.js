@@ -13,7 +13,7 @@ function App() {
   const lastText = <div className="display-text">Kablow!💥😜</div>;
   const uberText = <div className="display-text">Kablow!💥😜</div>;
   const coffeeButtonTitle = 'CLICK ME TOO ☕️';
-  const bombButtonTitle = 'CLICK BLUBUTTON 💣';
+  const bombButtonTitle = 'CLICK BUTTON 💣';
   const lastButtonTitle = 'CLICKETY TADA';
   const uberDisplayText = 'UBER CLICK';
 
