@@ -8,7 +8,7 @@ enable_rule["check_version"]
 
 # signal to circleci that check_version is a hard_failure condition and that builds should be
 # stopped if this rule is not satisfied.
-hard_fail["check_version"]
+# hard_fail["check_version"]
 
 # define check version
 check_version = reason {
