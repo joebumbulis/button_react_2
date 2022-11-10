@@ -10,7 +10,7 @@ orbs:
   gcp-gcr: circleci/gcp-gcr@0.13.0
   gcp-gke: circleci/gcp-gke@1.3.0
   slack: circleci/slack@4.4.4
-  # snyk: snyk/snyk@1.1.2
+  snyk: snyk/snyk@1.1.2
  
 #orchestrate jobs: define dependencies, run order, and approval 
 workflows:
@@ -132,11 +132,11 @@ jobs:
       - gcp-gcr/build-image:
           image: cci-react-demo-app
           tag: v1-${CIRCLE_SHA1} #Change version number when updating app, ie. v2
-      # - snyk/scan:
-      #     severity-threshold: high
-      #     docker-image-name: joebumbulis/cci-react-demo-app:v1
-      #     target-file: "Dockerfile"
-      #     fail-on-issues: false
+      - snyk/scan:
+          severity-threshold: high
+          docker-image-name: joebumbulis/cci-react-demo-app:v1
+          target-file: "Dockerfile"
+          fail-on-issues: false
       - gcp-gcr/push-image:
           image: cci-react-demo-app
           tag: v1-${CIRCLE_SHA1} #Change version number when updating app, ie. v2
