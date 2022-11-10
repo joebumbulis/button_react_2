@@ -1,6 +1,6 @@
-import './styling/App.css';
 import React, { useState } from 'react';
 import Button from './button';
+import './styling/App.css';
 
 function App() {
   const [displayText, setDisplayText] = useState(false);
@@ -11,7 +11,7 @@ function App() {
   const secondText = <div className="display-text">Shablow!💥😜</div>;
   const lastText = <div className="display-text">Kablow!💥😜</div>;
   const coffeeButtonTitle = 'CLICK ME TOO ☕️';
-  const bombButtonTitle = 'CLICK BUTTON 💣';
+  const bombButtonTitle = 'CLICK BUBUTTON 💣';
   const lastButtonTitle = 'CLICKETY TADA';
 
   return (
