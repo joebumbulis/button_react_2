@@ -1,7 +1,7 @@
 # All policies start with the org package definition
 package org
 
-policy_name["example"]
+policy_name["require_config_2_1"]
 
 # signal to circleci that check_version is enabled and must be included when making a decision
 enable_rule["check_version"]
