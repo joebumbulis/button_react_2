@@ -16,8 +16,6 @@ orbs:
 workflows:
   version: 2
   build-test-deploy:
-    when: 
-      equal: [main, << pipeline.git.branch >>]
     jobs:
       - build
       - lint:
