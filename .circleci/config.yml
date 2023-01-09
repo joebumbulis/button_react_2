@@ -148,7 +148,7 @@ jobs:
     machine: true
     resource_class: large
     steps:
-      - gcp-gcr/gcr-auth
+      # - gcp-gcr/gcr-auth
       # Install `gcloud` and `kubectl` if not already installed.
       - gcp-gke/install
       # Update a deployment Docker image.
