@@ -102,7 +102,7 @@ jobs:
           command: npm run lint
 
   test: 
-    # parallelism: 4
+    parallelism: 4
     executor: node
     resource_class: large
     steps:
