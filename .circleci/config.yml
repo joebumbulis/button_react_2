@@ -150,7 +150,7 @@ jobs:
     steps:
       # - gcp-gcr/gcr-auth
       # # Install `gcloud` and `kubectl` if not already installed.
-      # - gcp-gke/install
+      - gcp-gke/install
       # # Update a deployment Docker image.
       # - gcp-gke/rollout-image:
       #     cluster: circle-ci-cluster
