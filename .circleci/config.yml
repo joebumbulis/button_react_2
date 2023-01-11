@@ -148,16 +148,16 @@ jobs:
     machine: true
     resource_class: large
     steps:
-      - gcp-gcr/gcr-auth
-      # Install `gcloud` and `kubectl` if not already installed.
-      - gcp-gke/install
-      # Update a deployment Docker image.
-      - gcp-gke/rollout-image:
-          cluster: circle-ci-cluster
-          deployment: react-circle-prod
-          container: cci-react-demo-app
-          image: gcr.io/optimal-sentry-327419/cci-react-demo-app
-          tag: v1-${CIRCLE_SHA1} 
+      # - gcp-gcr/gcr-auth
+      # # Install `gcloud` and `kubectl` if not already installed.
+      # - gcp-gke/install
+      # # Update a deployment Docker image.
+      # - gcp-gke/rollout-image:
+      #     cluster: circle-ci-cluster
+      #     deployment: react-circle-prod
+      #     container: cci-react-demo-app
+      #     image: gcr.io/optimal-sentry-327419/cci-react-demo-app
+      #     tag: v1-${CIRCLE_SHA1} 
 
 
 
