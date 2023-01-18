@@ -102,9 +102,9 @@ jobs:
           command: npm run lint
 
   test: 
-    parallelism: 4
+    # parallelism: 4
     executor: node
-    resource_class: xlarge
+    resource_class: large
     steps:
       - installnode 
       - run: mkdir ~/junit
@@ -191,4 +191,4 @@ jobs:
 #           # Optional, defaults to main:
 #           base-revision: origin/main
 
-# VS Code Extension Version: 1.0.0
+# VS Code Extension Version: 1.5.1

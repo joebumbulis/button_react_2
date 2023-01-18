@@ -20,7 +20,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Button onClick={() => setDisplayText(true)} buttonTitle={} />
+        <Button onClick={() => setDisplayText(true)} buttonTitle={bombButtonTitle} />
         {displayText && textToDisplay}
 
         <p />
