@@ -12,15 +12,15 @@ function App() {
   const secondText = <div className="display-text">Shablow!💥😜</div>;
   const lastText = <div className="display-text">Kablow!💥😜</div>;
   const uberText = <div className="display-text">Kablow!💥😜</div>;
-  // const coffeeButtonTitle = 'CLICK ME TOO ☕️';
-  // const bombButtonTitle = 'CLICK BUTTON 💣';
-  // const lastButtonTitle = 'CLICKETY TADA';
-  // const uberDisplayText = 'UBER CLICK';
+  const coffeeButtonTitle = 'CLICK ME TOO ☕️';
+  const bombButtonTitle = 'CLICK BUTTON 💣';
+  const lastButtonTitle = 'CLICKETY TADA';
+  const uberDisplayText = 'UBER CLICK';
 
   return (
     <div className="App">
       <header className="App-header">
-        <Button onClick={() => setDisplayText(true)} buttonTitle={bombButtonTitle} />
+        <Button onClick={() => setDisplayText(true)} buttonTitle={} />
         {displayText && textToDisplay}
 
         <p />
