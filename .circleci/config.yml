@@ -145,7 +145,7 @@ jobs:
   #Deploy app to GKE
   gke-deploy:
     description: Deploy application to Google Kubernetes Engine
-    machine: true
+    # machine: true
     resource_class: large
     steps:
       # - gcp-gcr/gcr-auth
@@ -191,4 +191,4 @@ jobs:
 #           # Optional, defaults to main:
 #           base-revision: origin/main
 
-# VS Code Extension Version: 1.0.0
+# VS Code Extension Version: 1.5.1
