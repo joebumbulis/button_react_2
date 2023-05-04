@@ -145,7 +145,7 @@ jobs:
   #Deploy app to GKE
   gke-deploy:
     description: Deploy application to Google Kubernetes Engine
-    # machine: true
+    machine: true
     resource_class: large
     steps:
       # - gcp-gcr/gcr-auth
